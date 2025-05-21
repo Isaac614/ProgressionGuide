@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.UI;
 
@@ -10,9 +11,18 @@ namespace ProgressionGuide.UI
 
         public override void OnInitialize()
         {
-            base.OnInitialize();
             mainWindow = new MainWindow();
             Append(mainWindow);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+
+            if (ContainsPoint(Main.MouseScreen)) // for cursor disappearing
+            {
+                Main.LocalPlayer.mouseInterface = true;
+            }
         }
     }
 }

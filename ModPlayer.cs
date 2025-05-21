@@ -1,7 +1,12 @@
 
+using System.Diagnostics.Eventing.Reader;
+using ProgressionGuide.UI;
+using Terraria;
+using Terraria.GameInput;
 using Terraria.ModLoader;
 
-public class MyModPlayer : ModPlayer
+
+public class UITogglePlayer : ModPlayer
 {
     // public override void OnEnterWorld()
     // {
@@ -12,4 +17,19 @@ public class MyModPlayer : ModPlayer
     //     Player.QuickSpawnItem(null, Terraria.ID.ItemID.SolarFlareLeggings);
 
     // }
+
+    private bool previousKeyState = false;
+
+    public override void ProcessTriggers(TriggersSet triggersSet)
+    {
+        bool currentKeyState = Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.G);
+
+        if (currentKeyState && !previousKeyState)
+        {
+            ProgressionGuideUISystem.ToggleUI();
+        }
+
+        previousKeyState = currentKeyState;
+    }
+
 }

@@ -1,37 +1,48 @@
-using Terraria.GameContent.UI.Elements;
-using Terraria.Localization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.ModLoader;
-using System.ComponentModel;
 using Terraria.UI;
 
 namespace ProgressionGuide.UI
 {
-    public class SearchBar : UISearchBar
+    public class SearchBar : UIElement
     {
+        private string searchText = "";
+        private bool isActive = false;
 
-        public SearchBar() : base(Language.GetText("Mods.ProgressionGuide.SearchPlaceholder"), 1f)
+        public SearchBar()
         {
-            Width.Set(200f, 0f); // 200 pixels wide
-            Height.Set(30f, 0f); // 30 pixels tall
-            HAlign = 0.5f;
-            VAlign = 0.3f;
+            Width.Set(300, 0f);
+            Height.Set(30, 0f);
+
+            Left.Set(50, 0f);
+            Top.Set(50, 0f);
         }
-
-        
-
 
         public override void OnInitialize()
         {
             base.OnInitialize();
+
+            if (Main.netMode == Terraria.ID.NetmodeID.SinglePlayer) // for debugging 
+            {
+                Main.NewText("SearchBar initialized!", Color.Cyan);
+            }
         }
 
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+
+            if (IsMouseHovering && Main.mouseLeft && Main.mouseLeftRelease)
+            {
+                isActive = false;
+            }
+        }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-
             CalculatedStyle dimensions = GetDimensions();
             Rectangle hitbox = new Rectangle(
                 (int)dimensions.X,
@@ -40,22 +51,29 @@ namespace ProgressionGuide.UI
                 (int)dimensions.Height
             );
 
-            Main.NewText($"SearchBar.Draw called! Dims: X={dimensions.X}, Y={dimensions.Width}, H={dimensions.Height}");
+            Texture2D pixel = TextureAssets.MagicPixel.Value;
+            Color backgroundcolor = isActive ? new Color(255, 255, 255, 230) : new Color(200, 200, 200, 200);
+            spriteBatch.Draw(pixel, hitbox, backgroundcolor);
 
-            Texture2D pixel = ModContent.Request<Texture2D>("Images/Misc/Pixel").Value;
-            // Color customBgColor = new Color(65, 80, 120, 220);
-            spriteBatch.Draw(pixel, hitbox, Color.Red);
-            // base.Draw(spriteBatch);
+            DrawBorder(spriteBatch, hitbox, isActive ? Color.Blue : Color.Gray, 2);
 
-            // DrawBorder(spriteBatch, hitbox, new Color(120, 180, 100, 255), 2);
+            // var font = FontAssets.MouseText.Value;
+            // string displayText = string.IsNullOrEmpty(searchText) ? "Search..." : searchText;
+            // Color textColor = string.IsNullOrEmpty(searchText) ? Color.Gray : Color.Black;
+
+            // Vector2 textPosition = new Vector2(dimensions.X + 5, dimensions.Y + 5);
+            // spriteBatch.DrawString(font, displayText, textPosition, textColor);
+
+            // string debugtext = $"SearchBar: {dimensions.Width}x{dimensions.Height} Active: {isActive}";
+            // Vector2 debugPos = new Vector2(dimensions.X, dimensions.Y - 20);
+            // spriteBatch.DrawString(font, debugText, debugPos, Color.Yellow);
         }
 
-        private void DrawBorder(SpriteBatch spriteBatch, Rectangle hitbox, Color borderColor, int thickness)
+        public void DrawBorder(SpriteBatch spriteBatch, Rectangle hitbox, Color borderColor, int thickness)
         {
-            Texture2D pixel = ModContent.Request<Texture2D>("Images/Misc/Pixel").Value;
+            Texture2D pixel = TextureAssets.MagicPixel.Value;
 
-
-            // Top border
+             // Top border
             spriteBatch.Draw(pixel, new Rectangle(hitbox.X, hitbox.Y, hitbox.Width, thickness), borderColor);
             // Bottom border
             spriteBatch.Draw(pixel, new Rectangle(hitbox.X, hitbox.Y + hitbox.Height - thickness, hitbox.Width, thickness), borderColor);
@@ -64,5 +82,8 @@ namespace ProgressionGuide.UI
             // Right border
             spriteBatch.Draw(pixel, new Rectangle(hitbox.X + hitbox.Width - thickness, hitbox.Y + thickness, thickness, hitbox.Height - 2 * thickness), borderColor);
         }
+
+
     }
+
 }

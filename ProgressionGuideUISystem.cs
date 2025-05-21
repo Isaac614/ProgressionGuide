@@ -4,66 +4,70 @@ using Terraria.ModLoader;
 using Terraria.UI;
 using Terraria;
 using ProgressionGuide;
+using System.Diagnostics.Eventing.Reader;
+using Terraria.ID;
 
 namespace ProgressionGuide.UI
 {
     [Autoload(Side = ModSide.Client)]
 
-    public class MainWindowSystem : ModSystem
+    public class ProgressionGuideUISystem : ModSystem
     {
         internal MainUIState _mainUIState;
-        private UserInterface _userInterface;
-
+        internal UserInterface _userInterface;
+        private GameTime _lastUpdateUIGameTime;
+        public static bool UIIsVisible { get; set; }
 
         public override void Load()
         {
+            _userInterface = new UserInterface();
 
             _mainUIState = new MainUIState();
-            _userInterface = new UserInterface();
+            _mainUIState.Activate();
             _userInterface.SetState(_mainUIState);
         }
 
         public override void Unload()
         {
-            _mainUIState = null;
             _userInterface = null;
         }
 
         public override void UpdateUI(GameTime gameTime)
         {
-            _userInterface.Update(gameTime);
+            _lastUpdateUIGameTime = gameTime;
+            if (_userInterface?.CurrentState != null && UIIsVisible)
+            {
+                _userInterface.Update(gameTime);
+            }
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
             int mouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
-            
             if (mouseTextIndex != -1)
             {
                 layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
-                    "Progression Guide UI",
+                    "ProgressionGuide: Interface",
                     delegate
                     {
-                        if (_userInterface?.CurrentState != null)
+                        if (UIIsVisible && _lastUpdateUIGameTime != null && _userInterface?.CurrentState != null)
                         {
-                            _userInterface.Draw(Main.spriteBatch, new GameTime());
+                            _userInterface.Draw(Main.spriteBatch, _lastUpdateUIGameTime);
                         }
                         return true;
                     },
-                    InterfaceScaleType.UI
-                ));
+                    InterfaceScaleType.UI));
             }
         }
 
-        public void ToggleUI()
+
+        public static void ToggleUI()
         {
-            if (_userInterface.CurrentState == null)
+            UIIsVisible = !UIIsVisible;
+
+            if (Main.netMode == NetmodeID.SinglePlayer)
             {
-                _userInterface.SetState(_mainUIState);
-            }
-            else
-            {
-                _userInterface.SetState(null);
+                Main.NewText($"UI toggled", Color.Yellow);
             }
         }
     }
