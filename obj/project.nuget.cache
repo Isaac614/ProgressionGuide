@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "YjZ4yIeAWXA=",
+  "success": true,
+  "projectFilePath": "/Users/Isaac/Library/Application Support/Terraria/tModLoader/ModSources/ProgressionGuide/ProgressionGuide.csproj",
+  "expectedPackageFiles": [
+    "/Users/Isaac/.nuget/packages/tmodloader.codeassist/0.1.5/tmodloader.codeassist.0.1.5.nupkg.sha512"
+  ],
+  "logs": []
+}
