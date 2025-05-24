@@ -6,6 +6,7 @@ using Terraria;
 using ProgressionGuide;
 using System.Diagnostics.Eventing.Reader;
 using Terraria.ID;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ProgressionGuide.UI
 {
@@ -16,7 +17,7 @@ namespace ProgressionGuide.UI
         internal MainUIState _mainUIState;
         internal UserInterface _userInterface;
         private GameTime _lastUpdateUIGameTime;
-        public static bool UIIsVisible { get; set; }
+        public static bool IsUIVisible { get; set; }
 
         public override void Load()
         {
@@ -35,7 +36,7 @@ namespace ProgressionGuide.UI
         public override void UpdateUI(GameTime gameTime)
         {
             _lastUpdateUIGameTime = gameTime;
-            if (_userInterface?.CurrentState != null && UIIsVisible)
+            if (_userInterface?.CurrentState != null && IsUIVisible)
             {
                 _userInterface.Update(gameTime);
             }
@@ -50,7 +51,7 @@ namespace ProgressionGuide.UI
                     "ProgressionGuide: Interface",
                     delegate
                     {
-                        if (UIIsVisible && _lastUpdateUIGameTime != null && _userInterface?.CurrentState != null)
+                        if (IsUIVisible && _lastUpdateUIGameTime != null && _userInterface?.CurrentState != null)
                         {
                             _userInterface.Draw(Main.spriteBatch, _lastUpdateUIGameTime);
                         }
@@ -60,14 +61,13 @@ namespace ProgressionGuide.UI
             }
         }
 
-
         public static void ToggleUI()
         {
-            UIIsVisible = !UIIsVisible;
+            IsUIVisible = !IsUIVisible;
 
             if (Main.netMode == NetmodeID.SinglePlayer)
             {
-                Main.NewText($"UI toggled", Color.Yellow);
+                Main.NewText($"UI toggled", Color.Blue);
             }
         }
     }

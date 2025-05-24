@@ -18,18 +18,20 @@ public class UITogglePlayer : ModPlayer
 
     // }
 
-    private bool previousKeyState = false;
+    private bool activeKeyPreviousState = false;
+
 
     public override void ProcessTriggers(TriggersSet triggersSet)
     {
-        bool currentKeyState = Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.G);
+        bool activeKeyCurrentState = Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.G);
 
-        if (currentKeyState && !previousKeyState)
+        if (activeKeyCurrentState && !activeKeyPreviousState)
         {
             ProgressionGuideUISystem.ToggleUI();
         }
 
-        previousKeyState = currentKeyState;
+        activeKeyPreviousState = activeKeyCurrentState;
     }
+
 
 }
