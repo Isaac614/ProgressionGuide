@@ -45,5 +45,6 @@ namespace ProgressionGuide.UI
             searchBar = new SearchBar();
             Append(searchBar);
         }
+
     }
 }

@@ -6,7 +6,7 @@ namespace ProgressionGuide.UI
 {
     public class MainUIState : UIState
     {
-        public MainWindow mainWindow; 
+        public MainWindow mainWindow;
 
 
         public override void OnInitialize()

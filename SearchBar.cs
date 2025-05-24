@@ -33,6 +33,15 @@ namespace ProgressionGuide.UI
         public string SearchText
         {
             get { return searchText; }
+            // set { searchText = value; }
+        }
+
+        public void ClearSearch()
+        {
+            searchText = "";
+            cursorPosition = 0;
+            showCursor = false;
+            cursorTimer = 0f;
         }
 
         public bool IsActive

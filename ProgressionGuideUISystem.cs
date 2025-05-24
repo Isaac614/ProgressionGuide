@@ -40,6 +40,11 @@ namespace ProgressionGuide.UI
             {
                 _userInterface.Update(gameTime);
             }
+
+            if (!IsUIVisible)
+            {
+                _mainUIState.mainWindow.searchBar.ClearSearch();
+            }
         }
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
@@ -65,10 +70,7 @@ namespace ProgressionGuide.UI
         {
             IsUIVisible = !IsUIVisible;
 
-            if (Main.netMode == NetmodeID.SinglePlayer)
-            {
-                Main.NewText($"UI toggled", Color.Blue);
-            }
+            Main.NewText($"UI toggled", Color.Blue);
         }
     }
 }
