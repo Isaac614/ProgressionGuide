@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Mono.Cecil.Cil;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ModLoader;
@@ -20,6 +21,9 @@ namespace ProgressionGuide.UI
         private KeyboardState previousKeyBoardState;
         private KeyboardState currentKeyboardState;
 
+        private MouseState previousMouseState;
+        private MouseState currentMouseState;
+
 
         public SearchBar()
         {
@@ -36,6 +40,11 @@ namespace ProgressionGuide.UI
             // set { searchText = value; }
         }
 
+        public bool IsActive
+        {
+            get { return isActive; }
+        }
+
         public void ClearSearch()
         {
             searchText = "";
@@ -44,29 +53,43 @@ namespace ProgressionGuide.UI
             cursorTimer = 0f;
         }
 
-        public bool IsActive
-        {
-            get { return isActive; }
-        }
-
         public override void OnInitialize()
         {
             base.OnInitialize();
             previousKeyBoardState = Keyboard.GetState();
         }
 
-        public override void Update(GameTime gameTime) // TODO - this logic isn't perfect. It should stay active until you click somewhere else.
+        public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
 
-            if (Main.mouseLeft && IsMouseHovering)
+            currentMouseState = Mouse.GetState();
+
+            bool wasLeftMouseButtonJustPressed = currentMouseState.LeftButton == ButtonState.Pressed && previousMouseState.LeftButton == ButtonState.Released;
+
+            if (wasLeftMouseButtonJustPressed)
             {
-                isActive = true;
+                if (IsMouseHovering)
+                {
+                    isActive = true;
+                }
+
+                else
+                {
+                    isActive = false;
+                }
             }
-            else if (!IsMouseHovering)
-            {
-                isActive = false;
-            }
+
+            previousMouseState = currentMouseState;
+
+            // if (Main.mouseLeft && IsMouseHovering)
+            // {
+            //     isActive = true;
+            // }
+            // else if (!IsMouseHovering)
+            // {
+            //     isActive = false;
+            // }
 
             if (isActive)
             {
@@ -205,11 +228,11 @@ namespace ProgressionGuide.UI
                 case Keys.OemMinus: return shift ? '_' : '-';
                 case Keys.OemPlus: return shift ? '+' : '=';
                 case Keys.OemTilde: return shift ? '~' : '`';
-                
+
                 default:
                     return '\0';
             }
-                
+
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -274,7 +297,7 @@ namespace ProgressionGuide.UI
         {
             Texture2D pixel = TextureAssets.MagicPixel.Value;
 
-             // Top border
+            // Top border
             spriteBatch.Draw(pixel, new Rectangle(hitbox.X, hitbox.Y, hitbox.Width, thickness), borderColor);
             // Bottom border
             spriteBatch.Draw(pixel, new Rectangle(hitbox.X, hitbox.Y + hitbox.Height - thickness, hitbox.Width, thickness), borderColor);

@@ -46,5 +46,6 @@ namespace ProgressionGuide.UI
             Append(searchBar);
         }
 
+
     }
 }

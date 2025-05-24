@@ -34,5 +34,6 @@ namespace ProgressionGuide.UI
                 Main.LocalPlayer.mouseInterface = true;
             }
         }
+
     }
 }

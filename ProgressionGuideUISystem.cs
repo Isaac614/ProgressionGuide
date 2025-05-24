@@ -31,6 +31,7 @@ namespace ProgressionGuide.UI
         public override void Unload()
         {
             _userInterface = null;
+            IsUIVisible = false;
         }
 
         public override void UpdateUI(GameTime gameTime)
