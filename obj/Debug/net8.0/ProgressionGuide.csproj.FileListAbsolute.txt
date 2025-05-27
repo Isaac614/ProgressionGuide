@@ -229,3 +229,4 @@
 /Users/Isaac/Library/Application Support/Terraria/tModLoader/ModSources/ProgressionGuide/obj/Debug/net8.0/refint/ProgressionGuide.dll
 /Users/Isaac/Library/Application Support/Terraria/tModLoader/ModSources/ProgressionGuide/obj/Debug/net8.0/ProgressionGuide.pdb
 /Users/Isaac/Library/Application Support/Terraria/tModLoader/ModSources/ProgressionGuide/obj/Debug/net8.0/ref/ProgressionGuide.dll
+/Users/Isaac/Library/Application Support/Terraria/tModLoader/ModSources/ProgressionGuide/obj/Debug/net8.0/ProgressionGuide.sourcelink.json

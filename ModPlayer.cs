@@ -3,7 +3,9 @@ using System.Diagnostics.Eventing.Reader;
 using ProgressionGuide.UI;
 using Terraria;
 using Terraria.GameInput;
+using Terraria.ID;
 using Terraria.ModLoader;
+using Microsoft.Xna.Framework.Input;
 
 
 public class UITogglePlayer : ModPlayer
@@ -19,19 +21,29 @@ public class UITogglePlayer : ModPlayer
     // }
 
     private bool activeKeyPreviousState = false;
+    private bool testKeyPreviousState = false;
 
 
     public override void ProcessTriggers(TriggersSet triggersSet)
     {
-        bool activeKeyCurrentState = Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.G);
+        ProgressionGuideUISystem uiSystem = ModContent.GetInstance<ProgressionGuideUISystem>();
 
-        if (activeKeyCurrentState && !activeKeyPreviousState)
+        bool activeKeyState = Main.keyState.IsKeyDown(Keys.G);
+
+        if (activeKeyState && !activeKeyPreviousState)
         {
-            ProgressionGuideUISystem.ToggleUI();
+            uiSystem.ToggleUI();
         }
 
-        activeKeyPreviousState = activeKeyCurrentState;
+        activeKeyPreviousState = activeKeyState;
+
+        bool testKeyState = Main.keyState.IsKeyDown(Keys.OemCloseBrackets);
+
+        if (testKeyState && !testKeyPreviousState)
+        {
+            uiSystem.PopulateItemLookupWindow();
+        }
+
+        testKeyPreviousState = testKeyState;
     }
-
-
 }

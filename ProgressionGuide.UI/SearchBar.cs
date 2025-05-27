@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Mono.Cecil.Cil;
+using ReLogic.Graphics;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ModLoader;
@@ -27,11 +28,11 @@ namespace ProgressionGuide.UI
 
         public SearchBar()
         {
-            Width.Set(300, 0f);
+            Width.Set(0, 0.33f);
             Height.Set(30, 0f);
 
-            Left.Set(50, 0f);
-            Top.Set(50, 0f);
+            Left.Set(0, .66f);
+            Top.Set(0, 0f);
         }
 
         public string SearchText
@@ -65,7 +66,8 @@ namespace ProgressionGuide.UI
 
             currentMouseState = Mouse.GetState();
 
-            bool wasLeftMouseButtonJustPressed = currentMouseState.LeftButton == ButtonState.Pressed && previousMouseState.LeftButton == ButtonState.Released;
+            bool wasLeftMouseButtonJustPressed = currentMouseState.LeftButton == ButtonState.Pressed &&
+            previousMouseState.LeftButton == ButtonState.Released;
 
             if (wasLeftMouseButtonJustPressed)
             {
@@ -81,15 +83,6 @@ namespace ProgressionGuide.UI
             }
 
             previousMouseState = currentMouseState;
-
-            // if (Main.mouseLeft && IsMouseHovering)
-            // {
-            //     isActive = true;
-            // }
-            // else if (!IsMouseHovering)
-            // {
-            //     isActive = false;
-            // }
 
             if (isActive)
             {
@@ -115,7 +108,7 @@ namespace ProgressionGuide.UI
 
             foreach (Keys key in pressedKeys)
             {
-                // Only process if htis key wasn't pressed in the prev frame
+                // Only process if this key wasn't pressed in the prev frame
                 if (!IsKeyInArray(key, previousPressedKeys))
                 {
                     switch (key)
@@ -238,12 +231,13 @@ namespace ProgressionGuide.UI
         public override void Draw(SpriteBatch spriteBatch)
         {
             CalculatedStyle dimensions = GetDimensions();
-            Rectangle hitbox = new Rectangle(
-                (int)dimensions.X,
-                (int)dimensions.Y,
-                (int)dimensions.Width,
-                (int)dimensions.Height
-            );
+            // Rectangle hitbox = new Rectangle(
+            //     (int)dimensions.X,
+            //     (int)dimensions.Y,
+            //     (int)dimensions.Width,
+            //     (int)dimensions.Height
+            // );
+            Rectangle hitbox = dimensions.ToRectangle();
 
             Texture2D pixel = TextureAssets.MagicPixel.Value;
             Color backgroundcolor = isActive ? new Color(255, 255, 255, 230) : new Color(200, 200, 200, 200);
@@ -251,45 +245,47 @@ namespace ProgressionGuide.UI
 
             DrawBorder(spriteBatch, hitbox, isActive ? Color.Blue : Color.Gray, 2);
 
-            if (FontAssets.MouseText?.Value != null)
+            if (FontAssets.MouseText?.Value != null) 
             {
-                var font = FontAssets.MouseText.Value;
+                DynamicSpriteFont font = FontAssets.MouseText.Value;
+
                 string displayText = string.IsNullOrEmpty(searchText) ? "Search..." : searchText;
                 Color textColor = string.IsNullOrEmpty(searchText) ? Color.Gray : Color.Black;
 
-                Vector2 textPosition = new Vector2(dimensions.X + 5, dimensions.Y + 5);
+                Vector2 textSize = font.MeasureString(displayText); 
+                float paddingX = 8f; 
+                float verticalOffset = (dimensions.Height - textSize.Y) / 2f; 
+                
+                Vector2 textPosition = new Vector2(dimensions.X + paddingX, dimensions.Y + verticalOffset);
+
                 Utils.DrawBorderStringFourWay(spriteBatch, font, displayText, textPosition.X, textPosition.Y, textColor, Color.Black, Vector2.Zero, 1f);
-
-                // Draw cursor when active
-                if (isActive && showCursor && !string.IsNullOrEmpty(searchText))
+                
+                if (isActive && showCursor)
                 {
-                    string textBeforeCursor = searchText.Substring(0, cursorPosition);
-                    Vector2 cursorTextSize = font.MeasureString(textBeforeCursor);
-                    Vector2 cursorPos = new Vector2(textPosition.X + cursorTextSize.X, textPosition.Y);
+                    Vector2 cursorDrawPos;
+
+                    if (string.IsNullOrEmpty(searchText))
+                    {
+                        cursorDrawPos = new Vector2(textPosition.X, textPosition.Y);
+                    }
+                    else
+                    {  
+                        string textBeforeCursor = searchText.Substring(0, cursorPosition);
+                        Vector2 textBeforeCursorSize = font.MeasureString(textBeforeCursor);
+                        
+                        cursorDrawPos = new Vector2(textPosition.X + textBeforeCursorSize.X, textPosition.Y);
+                    }
+                    
+                    int cursorHeight = (int)(font.MeasureString("A").Y * 0.75);
 
                     Rectangle cursorRect = new Rectangle(
-                        (int)cursorPos.X,
-                        (int)cursorPos.Y,
-                        2,
-                        (int)font.MeasureString("A").Y
+                        (int)cursorDrawPos.X,
+                        (int)cursorDrawPos.Y, 
+                        2, 
+                        cursorHeight
                     );
-                    spriteBatch.Draw(TextureAssets.MagicPixel.Value, cursorRect, Color.Black);
+                    spriteBatch.Draw(TextureAssets.MagicPixel.Value, cursorRect, Color.Red);
                 }
-                else if (isActive && showCursor && string.IsNullOrEmpty(searchText))
-                {
-                    Rectangle cursorRect = new Rectangle(
-                        (int)textPosition.X,
-                        (int)textPosition.Y,
-                        2,
-                        (int)font.MeasureString("A").Y
-                    );
-                    spriteBatch.Draw(TextureAssets.MagicPixel.Value, cursorRect, Color.Black);
-                }
-
-                // Draw debug info
-                string debugText = $"SearchBar: {dimensions.Width}x{dimensions.Height} Active: {isActive}";
-                Vector2 debugPos = new Vector2(dimensions.X, dimensions.Y - 20);
-                Utils.DrawBorderStringFourWay(spriteBatch, font, debugText, debugPos.X, debugPos.Y, Color.Red, Color.Black, Vector2.Zero, 0.8f);
             }
         }
 

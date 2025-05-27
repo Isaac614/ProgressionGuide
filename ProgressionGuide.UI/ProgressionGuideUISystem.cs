@@ -17,6 +17,7 @@ namespace ProgressionGuide.UI
         internal MainUIState _mainUIState;
         internal UserInterface _userInterface;
         private GameTime _lastUpdateUIGameTime;
+        // private SearchEngine _searchEngine = new SearchEngine();
         public static bool IsUIVisible { get; set; }
 
         public override void Load()
@@ -44,7 +45,7 @@ namespace ProgressionGuide.UI
 
             if (!IsUIVisible)
             {
-                _mainUIState.mainWindow.searchBar.ClearSearch();
+                _mainUIState.mainWindow.SearchBar.ClearSearch();
             }
         }
 
@@ -67,11 +68,17 @@ namespace ProgressionGuide.UI
             }
         }
 
-        public static void ToggleUI()
+        public void ToggleUI()
         {
             IsUIVisible = !IsUIVisible;
 
             Main.NewText($"UI toggled", Color.Blue);
         }
+
+        public void PopulateItemLookupWindow()
+        {
+            _mainUIState.mainWindow.PopulateCraftingInfo();
+        }
+
     }
 }
