@@ -2,6 +2,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Graphics;
 using Terraria;
+
+// using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.UI;
@@ -37,12 +39,11 @@ namespace ProgressionGuide.UI
             Rectangle bounds = dimensions.ToRectangle();
             Vector2 position = dimensions.Position();
 
-            
-
             Texture2D pixel = TextureAssets.MagicPixel.Value;
             float iconScale = 0.4f;
 
             // Gets item's texture/icon
+            Main.instance.LoadItem(_item.type);
             Texture2D itemIcon = TextureAssets.Item[_item.type].Value;
             float iconWidth = itemIcon.Width;
             string itemName = _item.Name;
@@ -53,22 +54,21 @@ namespace ProgressionGuide.UI
             DrawBorder(spriteBatch, bounds, Color.Blue, 2);
         }
 
-        private void DrawItemIcon(SpriteBatch spriteBatch, Texture2D itemIcon, Vector2 position, float iconScale)
+        protected void DrawItemIcon(SpriteBatch spriteBatch, Texture2D itemIcon, Vector2 position, float iconScale)
         {
-            Vector2 iconPosition = position + new Vector2(5f, 5f);
+            Vector2 iconPosition = position + new Vector2(5f, 3f);
 
             spriteBatch.Draw(itemIcon, iconPosition, null, Color.White, 0f,
             Vector2.Zero, iconScale, SpriteEffects.None, 0f);
-
         }
 
-        private void DrawItemName(SpriteBatch spriteBatch, string itemName, Vector2 position)
+        protected void DrawItemName(SpriteBatch spriteBatch, string itemName, Vector2 position)
         {
             DynamicSpriteFont font = FontAssets.MouseText.Value;
             spriteBatch.DrawString(font, itemName, position, Color.White);
         }
 
-        private void DrawBorder(SpriteBatch spriteBatch, Rectangle hitbox, Color borderColor, int thickness)
+        protected void DrawBorder(SpriteBatch spriteBatch, Rectangle hitbox, Color borderColor, int thickness)
         {
             Texture2D pixel = TextureAssets.MagicPixel.Value;
 

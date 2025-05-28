@@ -13,10 +13,11 @@ public class UITogglePlayer : ModPlayer
     // public override void OnEnterWorld()
     // {
 
-    //     Player.QuickSpawnItem(null, Terraria.ID.ItemID.Zenith, 1);
-    //     Player.QuickSpawnItem(null, Terraria.ID.ItemID.SolarFlareBreastplate);
-    //     Player.QuickSpawnItem(null, Terraria.ID.ItemID.SolarFlareHelmet);
-    //     Player.QuickSpawnItem(null, Terraria.ID.ItemID.SolarFlareLeggings);
+    //     // Player.QuickSpawnItem(null, ItemID.Zenith, 1);
+    //     // Player.QuickSpawnItem(null, ItemID.TerraBlade, 1);
+    //     // Player.QuickSpawnItem(null, ItemID.SolarFlareBreastplate);
+    //     // Player.QuickSpawnItem(null, ItemID.SolarFlareHelmet);
+    //     // Player.QuickSpawnItem(null, ItemID.SolarFlareLeggings);
 
     // }
 

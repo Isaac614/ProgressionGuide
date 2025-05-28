@@ -31,6 +31,10 @@ namespace ProgressionGuide.UI
         {
             Width.Set(0, width);
             Height.Set(0, height);
+            PaddingLeft = 5f;
+            PaddingRight = 5f;
+            PaddingTop = 5f;
+            PaddingBottom = 5f;
 
             if (bottomAlign)
             {
@@ -57,10 +61,11 @@ namespace ProgressionGuide.UI
 
             // Creating list for the content
             _contentList = new UIList();
-            _contentList.Width.Set(-25f, 1f);
+            _contentList.Width.Set(0, 1f);
             _contentList.Height.Set(0f, 1f);
             _contentList.Left.Set(0f, 0f);
             _contentList.Top.Set(0f, 0f);
+
             _contentList.PaddingTop = 5f;
             _contentList.PaddingBottom = 5f;
             _contentList.PaddingLeft = 5f;
@@ -71,10 +76,14 @@ namespace ProgressionGuide.UI
             // Creating scrollbar
             _scrollbar = new UIScrollbar();
             _scrollbar.Width.Set(20f, 0f);
-            _scrollbar.Height.Set(0f, 1f);
+            _scrollbar.Height.Set(0f, .9f);
             _scrollbar.Left.Set(-20f, 1f); // Positions at right edge
-            _scrollbar.Top.Set(0f, 0f);
-            Append(_scrollbar);
+            // _scrollbar.Top.Set(0f, 0f);
+            _scrollbar.VAlign = 0.5f;
+            _scrollbar.PaddingLeft = 0;
+            _scrollbar.PaddingRight = 0;
+            _scrollbar.PaddingTop = 8f;
+            _scrollbar.PaddingBottom = 8f;
 
             // Links scrollbar to the list
             _contentList.SetScrollbar(_scrollbar);
@@ -83,7 +92,7 @@ namespace ProgressionGuide.UI
         public void AddItem(UIElement element)
         {
             _contentList.Add(element);
-            // UpdateScrollbar();
+            UpdateScrollbar();
         }
 
         public void RemoveItem(UIElement element)
@@ -109,13 +118,19 @@ namespace ProgressionGuide.UI
 
             if (_needsScrollbar)
             {
-                _scrollbar.Left.Set(-20f, 1f);
-                _contentList.Width.Set(-25f, 1f);
+                if (!HasChild(_scrollbar))
+                {
+                    _contentList.Width.Set(-25f, 1f);
+                    Append(_scrollbar);
+                }
             }
             else
             {
-                _scrollbar.Left.Set(0f, 1f); // Moves scrollbar off-screen
-                _contentList.Width.Set(-5f, 1f);
+                if (HasChild(_scrollbar))
+                {
+                    RemoveChild(_scrollbar);
+                    _contentList.Width.Set(0, 1f);
+                }
             }
         }
 
