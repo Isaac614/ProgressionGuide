@@ -31,21 +31,25 @@ namespace ProgressionGuide.UI
 
         public override void Unload()
         {
+            _mainUIState.Deactivate();
+            _userInterface.SetState(null);
             _userInterface = null;
-            IsUIVisible = false;
         }
 
         public override void UpdateUI(GameTime gameTime)
         {
             _lastUpdateUIGameTime = gameTime;
-            if (_userInterface?.CurrentState != null && IsUIVisible)
+            if (IsUIVisible)
             {
+                if (_userInterface?.CurrentState == null)
+                {
+                    _userInterface.SetState(_mainUIState);
+                }
                 _userInterface.Update(gameTime);
             }
-
-            if (!IsUIVisible)
+            else
             {
-                _mainUIState.mainWindow.SearchBar.ClearSearch();
+                _userInterface.SetState(null);
             }
         }
 
@@ -80,5 +84,13 @@ namespace ProgressionGuide.UI
             _mainUIState.mainWindow.PopulateCraftingInfo();
         }
 
+        public override void OnWorldUnload()
+        {
+            base.OnWorldUnload();
+
+            _userInterface.SetState(null);
+            _mainUIState = new MainUIState();
+            IsUIVisible = false;
+        }
     }
 }

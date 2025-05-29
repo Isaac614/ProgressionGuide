@@ -8,7 +8,12 @@ namespace ProgressionGuide.UI
 {
     public class ScrollablePanel : UIPanel
     {
-        protected UIList _contentList = new UIList();
+        private float _width;
+        private float _height;
+        private bool _bottomAlign;
+        private bool _rightAlign;
+
+        private UIList _contentList = new UIList();
         protected UIScrollbar _scrollbar;
         protected bool _needsScrollbar = false;
         public int Count => _contentList.Count;
@@ -29,14 +34,24 @@ namespace ProgressionGuide.UI
 
         public ScrollablePanel(float width, float height, bool bottomAlign, bool rightAlign)
         {
-            Width.Set(0, width);
-            Height.Set(0, height);
+            _width = width;
+            _height = height;
+            _bottomAlign = bottomAlign;
+            _rightAlign = rightAlign;
+        }
+
+        public override void OnInitialize()
+        {
+            base.OnInitialize();
+
+            Width.Set(0, _width);
+            Height.Set(0, _height);
             PaddingLeft = 5f;
             PaddingRight = 5f;
             PaddingTop = 5f;
             PaddingBottom = 5f;
 
-            if (bottomAlign)
+            if (_bottomAlign)
             {
                 Top.Set(0, 1.0f - Height.Percent);
             }
@@ -45,7 +60,7 @@ namespace ProgressionGuide.UI
                 Top.Set(0, 0.0f);
             }
 
-            if (rightAlign)
+            if (_rightAlign)
             {
                 Left.Set(0, 1.0f - Width.Percent);
             }
@@ -53,11 +68,6 @@ namespace ProgressionGuide.UI
             {
                 Left.Set(0, 0.0f);
             }
-        }
-
-        public override void OnInitialize()
-        {
-            base.OnInitialize();
 
             // Creating list for the content
             _contentList = new UIList();
@@ -141,4 +151,6 @@ namespace ProgressionGuide.UI
             UpdateScrollbar();
         }
     }
+
+    
 }

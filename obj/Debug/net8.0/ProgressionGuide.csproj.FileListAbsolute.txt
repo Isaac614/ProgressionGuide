@@ -224,9 +224,9 @@
 /Users/Isaac/Library/Application Support/Terraria/tModLoader/ModSources/ProgressionGuide/obj/Debug/net8.0/ProgressionGuide.AssemblyInfoInputs.cache
 /Users/Isaac/Library/Application Support/Terraria/tModLoader/ModSources/ProgressionGuide/obj/Debug/net8.0/ProgressionGuide.AssemblyInfo.cs
 /Users/Isaac/Library/Application Support/Terraria/tModLoader/ModSources/ProgressionGuide/obj/Debug/net8.0/ProgressionGuide.csproj.CoreCompileInputs.cache
+/Users/Isaac/Library/Application Support/Terraria/tModLoader/ModSources/ProgressionGuide/obj/Debug/net8.0/ProgressionGuide.sourcelink.json
 /Users/Isaac/Library/Application Support/Terraria/tModLoader/ModSources/ProgressionGuide/obj/Debug/net8.0/Progress.E566021A.Up2Date
 /Users/Isaac/Library/Application Support/Terraria/tModLoader/ModSources/ProgressionGuide/obj/Debug/net8.0/ProgressionGuide.dll
 /Users/Isaac/Library/Application Support/Terraria/tModLoader/ModSources/ProgressionGuide/obj/Debug/net8.0/refint/ProgressionGuide.dll
 /Users/Isaac/Library/Application Support/Terraria/tModLoader/ModSources/ProgressionGuide/obj/Debug/net8.0/ProgressionGuide.pdb
 /Users/Isaac/Library/Application Support/Terraria/tModLoader/ModSources/ProgressionGuide/obj/Debug/net8.0/ref/ProgressionGuide.dll
-/Users/Isaac/Library/Application Support/Terraria/tModLoader/ModSources/ProgressionGuide/obj/Debug/net8.0/ProgressionGuide.sourcelink.json

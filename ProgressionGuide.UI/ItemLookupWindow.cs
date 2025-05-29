@@ -11,8 +11,6 @@ namespace ProgressionGuide.UI
         private SearchBar searchBar;
         private ScrollablePanel infoPanel;
         private CraftingPanel craftingPanel;
-        private ItemDisplay itemDisplay;
-
 
         public SearchBar SearchBar
         {
@@ -23,16 +21,6 @@ namespace ProgressionGuide.UI
         {
             base.OnInitialize();
 
-            searchBar = new SearchBar();
-            infoPanel = new ScrollablePanel();
-            craftingPanel = new CraftingPanel(0.3f, 0.85f, true, true, new Item(ItemID.TerraBlade, 1));
-            Append(searchBar);
-            Append(infoPanel);
-            Append(craftingPanel);
-        }
-
-        public ItemLookupWindow()
-        {
             Width.Set(0, 0.7f);
             Height.Set(0, 0.4f);
 
@@ -41,7 +29,17 @@ namespace ProgressionGuide.UI
 
             BackgroundColor = new Color(45, 60, 100, 220);
             BorderColor = new Color(80, 110, 180, 255);
+
+            searchBar = new SearchBar();
+            infoPanel = new ScrollablePanel(0.3f, 0.85f, true, false);
+            craftingPanel = new CraftingPanel(0.3f, 0.85f, true, true, new Item(ItemID.TerraBlade));
+
+
+            Append(searchBar);
+            Append(infoPanel);
+            Append(craftingPanel);
         }
+
 
         public string GetSearchText()
         {
@@ -52,7 +50,6 @@ namespace ProgressionGuide.UI
         {
             craftingPanel.PopulateContent(new Item(ItemID.TerraBlade));
         }
-
 
     }
 }

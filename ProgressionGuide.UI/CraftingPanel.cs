@@ -1,15 +1,69 @@
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.GameContent.UI.Elements;
+using Terraria.UI;
 
 namespace ProgressionGuide.UI
 {
-    public class CraftingPanel : ScrollablePanel
+
+    public class CraftingPanel : UIPanel
     {
+
+        private float _width;
+        private float _height;
+        private bool _bottomAlign;
+        private bool _rightAlign;
+        private Item _itemToCraft;
+        private IngredientPanel _ingredientPanel;
+        private StationPanel _stationPanel;
+
+
         public CraftingPanel(float width, float height, bool bottomAlign,
-        bool rightAlign, Item item) : base(width, height, bottomAlign, rightAlign)
+        bool rightAlign, Item item)
         {
-            PopulateContent(item);
+            _width = width;
+            _height = height;
+            _bottomAlign = bottomAlign;
+            _rightAlign = rightAlign;
+            _itemToCraft = item;
         }
+
+        public override void OnInitialize()
+        {
+            base.OnInitialize();
+
+            _ingredientPanel = new(1f, 0.75f, true, false);
+            _stationPanel = new(1f, 0.25f, false, false);
+
+            Width.Set(0, _width);
+            Height.Set(0, _height);
+            PaddingLeft = 5f;
+            PaddingRight = 5f;
+            PaddingTop = 5f;
+            PaddingBottom = 5f;
+
+            if (_bottomAlign)
+            {
+                Top.Set(0, 1.0f - Height.Percent);
+            }
+            else
+            {
+                Top.Set(0, 0.0f);
+            }
+
+            if (_rightAlign)
+            {
+                Left.Set(0, 1.0f - Width.Percent);
+            }
+            else
+            {
+                Left.Set(0, 0.0f);
+            }
+
+            Append(_ingredientPanel);
+            Append(_stationPanel);
+        }
+
 
         public void PopulateContent(Item item)
         {
@@ -23,22 +77,15 @@ namespace ProgressionGuide.UI
                 }
             }
 
-            for (int i = 0; i < recipe.requiredItem.Count; i++)
+            if (recipe != null)
             {
-                IngredientDisplay ingredient = new IngredientDisplay(recipe.requiredItem[i]);
-                AddItem(ingredient);
+                _ingredientPanel.PopulateContent(recipe);
+                _stationPanel.PopulateContent(recipe);
             }
-
-            DisplayContent();
-        }
-
-        public void DisplayContent()
-        {
-            foreach (IngredientDisplay element in _contentList)
+            else
             {
-                Main.NewText($"{element.Name} x {element.Amount}", Color.White);
+                // TODO - account for null recipe
             }
         }
-
     }
 }
