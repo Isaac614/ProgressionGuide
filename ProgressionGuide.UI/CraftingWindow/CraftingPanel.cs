@@ -1,5 +1,8 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
+using ReLogic.Graphics;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
 
@@ -32,14 +35,43 @@ namespace ProgressionGuide.UI
         {
             base.OnInitialize();
 
-            _ingredientPanel = new(1f, 0.70f, true, false);
-            _stationPanel = new(1f, 0.20f, false, false);
+            _stationPanel = new(1f, 0.2f, 0.1f, 0f);
+            _ingredientPanel = new(1f, 0.60f, true, false);
+
+            UIPanel stationLabel = new();
+            UIPanel ingredientLabel = new();
+
+            stationLabel.Height.Set(0f, 0.1f);
+            stationLabel.Width.Set(0f, 1f);
+            stationLabel.PaddingTop = 0;
+            stationLabel.PaddingBottom = 0;
+            stationLabel.BorderColor = new Color(0, 0, 0, 0);
+
+            ingredientLabel.Height.Set(0f, 0.1f);
+            ingredientLabel.Width.Set(0f, 1f);
+            ingredientLabel.Top.Set(0f, 0.3f);
+            ingredientLabel.Top.Set(0f, 0.3f);
+            ingredientLabel.PaddingTop = 0;
+            ingredientLabel.PaddingBottom = 0;
+            ingredientLabel.BorderColor = new Color(0, 0, 0, 0);
+
+            UIText stationLabelText = new UIText("Crafting Station", 1.0f);
+            stationLabelText.VAlign = 0.5f;
+            stationLabelText.HAlign = 0.5f;
+
+            UIText ingredientLabelText = new UIText("Ingredients", 1.0f);
+            ingredientLabelText.VAlign = 0.5f;
+            ingredientLabelText.HAlign = 0.5f;
+            
+            stationLabel.Append(stationLabelText);
+            ingredientLabel.Append(ingredientLabelText);
+
 
             Width.Set(0, _width);
             Height.Set(0, _height);
             PaddingLeft = 15f;
             PaddingRight = 15f;
-            PaddingTop = 15f;
+            PaddingTop = 3f;
             PaddingBottom = 15f;
 
             if (_bottomAlign)
@@ -60,8 +92,10 @@ namespace ProgressionGuide.UI
                 Left.Set(0, 0.0f);
             }
 
-            Append(_ingredientPanel);
             Append(_stationPanel);
+            Append(_ingredientPanel);
+            Append(stationLabel);
+            Append(ingredientLabel);
         }
 
 

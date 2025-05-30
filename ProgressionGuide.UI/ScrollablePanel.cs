@@ -10,6 +10,8 @@ namespace ProgressionGuide.UI
     {
         private float _width;
         private float _height;
+        private float? _top = null;
+        private float? _left = null;
         private bool _bottomAlign;
         private bool _rightAlign;
 
@@ -18,26 +20,22 @@ namespace ProgressionGuide.UI
         protected bool _needsScrollbar = false;
         public int Count => _contentList.Count;
 
-        public UIList ContentList
-        {
-            get { return _contentList; }
-        }
-
-        public ScrollablePanel()
-        {
-            Width.Set(0, 0.3f);
-            Height.Set(0, 0.85f);
-
-            Top.Set(0, 1.0f - Height.Percent);
-            Left.Set(0, 0.0f);
-        }
 
         public ScrollablePanel(float width, float height, bool bottomAlign, bool rightAlign)
         {
             _width = width;
             _height = height;
+
             _bottomAlign = bottomAlign;
             _rightAlign = rightAlign;
+        }
+        public ScrollablePanel(float width, float height, float top, float left)
+        {
+            _width = width;
+            _height = height;
+
+            _top = top;
+            _left = left;
         }
 
         public override void OnInitialize()
@@ -46,28 +44,27 @@ namespace ProgressionGuide.UI
 
             Width.Set(0, _width);
             Height.Set(0, _height);
+
             PaddingLeft = 5f;
             PaddingRight = 5f;
             PaddingTop = 5f;
             PaddingBottom = 5f;
 
             if (_bottomAlign)
-            {
                 Top.Set(0, 1.0f - Height.Percent);
-            }
+            else if (_top != null)
+                Top.Set(0f, (float)_top);
             else
-            {
-                Top.Set(0, 0.0f);
-            }
+                Top.Set(0f, 0f);
+
 
             if (_rightAlign)
-            {
                 Left.Set(0, 1.0f - Width.Percent);
-            }
+            else if (_left != null)
+                Left.Set(0f, (float)_left);
             else
-            {
-                Left.Set(0, 0.0f);
-            }
+                Left.Set(0f, 0f);
+                
 
             // Creating list for the content
             _contentList = new UIList();
@@ -88,7 +85,7 @@ namespace ProgressionGuide.UI
             _scrollbar.Width.Set(20f, 0f);
             _scrollbar.Height.Set(0f, .9f);
             _scrollbar.Left.Set(-20f, 1f); // Positions at right edge
-            // _scrollbar.Top.Set(0f, 0f);
+
             _scrollbar.VAlign = 0.5f;
             _scrollbar.PaddingLeft = 0;
             _scrollbar.PaddingRight = 0;

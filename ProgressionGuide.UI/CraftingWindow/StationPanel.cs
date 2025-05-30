@@ -13,6 +13,9 @@ namespace ProgressionGuide.UI
         public StationPanel(float width, float height, bool bottomAlign,
         bool rightAlign) : base(width, height, bottomAlign, rightAlign)
         { }
+        public StationPanel(float width, float height, float top,
+        float left) : base(width, height, top, left)
+        { }
 
         public void PopulateContent(Recipe recipe)
         {
