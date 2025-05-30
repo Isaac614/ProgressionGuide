@@ -12,7 +12,7 @@ namespace ProgressionGuide.UI
 {
     public class TileDisplay : ItemDisplay
     {
-        public TileDisplay(int tileId) : base(tileId, 32, false)
+        public TileDisplay(int tileId) : base(tileId)
         { }
 
         // private (string name, Texture2D texture, Rectangle sourceRectangle) GetTileDisplayInfo(int tileId)

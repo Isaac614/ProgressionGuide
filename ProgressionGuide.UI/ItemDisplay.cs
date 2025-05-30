@@ -6,22 +6,18 @@ using Terraria.GameContent;
 using Terraria.UI;
 using System.Text;
 using System.Collections.Generic;
-using Terraria.ModLoader;
-using Terraria.Social.WeGame;
 using Terraria.Map;
 using Terraria.ID;
 using Terraria.ObjectData;
-using rail;
-using Terraria.Graphics;
 
 
 namespace ProgressionGuide.UI
 {
     public class ItemDisplay : UIElement
     {
-        private Item _item;
+        private Item? _item;
         private string _name;
-        private Texture2D _sprite;
+        protected Texture2D _sprite;
         private int _stack;
         private int _desiredWidth;
         private bool _includeStack = false;
@@ -36,6 +32,7 @@ namespace ProgressionGuide.UI
             _sprite = TextureAssets.Item[item.type].Value;
             _stack = item.stack;
             _desiredWidth = 16;
+            OnInitialize();
         }
         public ItemDisplay(Item item, int desiredWidth)
         {
@@ -45,6 +42,7 @@ namespace ProgressionGuide.UI
             _sprite = TextureAssets.Item[item.type].Value;
             _stack = item.stack;
             _desiredWidth = desiredWidth;
+            OnInitialize();
         }
         public ItemDisplay(Item item, bool includeStack)
         {
@@ -55,6 +53,7 @@ namespace ProgressionGuide.UI
             _stack = item.stack;
             _desiredWidth = 16;
             _includeStack = includeStack;
+            OnInitialize();
         }
         public ItemDisplay(Item item, int desiredWidth, bool includeStack)
         {
@@ -65,6 +64,7 @@ namespace ProgressionGuide.UI
             _stack = item.stack;
             _desiredWidth = desiredWidth;
             _includeStack = includeStack;
+            OnInitialize();
         }
         public ItemDisplay(int tileId)
         {
@@ -73,6 +73,7 @@ namespace ProgressionGuide.UI
             _sprite = tileInfo.Item2;
             _sourceRectangle = tileInfo.Item3;
             _desiredWidth = 16;
+            OnInitialize();
         }
         public ItemDisplay(int tileId, int desiredWidth)
         {
@@ -80,23 +81,9 @@ namespace ProgressionGuide.UI
             _name = tileInfo.Item1;
             _sprite = tileInfo.Item2;
             _desiredWidth = desiredWidth;
+            OnInitialize();
         }
-        public ItemDisplay(int tileId, bool includeStack)
-        {
-            var tileInfo = GetTileDisplayInfo(tileId);
-            _name = tileInfo.Item1;
-            _sprite = tileInfo.Item2;
-            _includeStack = includeStack;
-            _desiredWidth = 16;
-        }
-        public ItemDisplay(int tileId, int desiredWidth, bool includeStack)
-        {
-            var tileInfo = GetTileDisplayInfo(tileId);
-            _name = tileInfo.Item1;
-            _sprite = tileInfo.Item2;
-            _desiredWidth = desiredWidth;
-            _includeStack = includeStack;
-        }
+
 
         public override void OnInitialize()
         {
@@ -104,6 +91,8 @@ namespace ProgressionGuide.UI
             Width.Set(0f, 1f);
             Height.Set(50f, 0f);
         }
+
+        
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
@@ -132,9 +121,8 @@ namespace ProgressionGuide.UI
             Rectangle bounds = dimensions.ToRectangle();
             Vector2 position = dimensions.Position();
 
-
             spriteBatch.Draw(pixel, bounds, Color.Red);
-            DrawItemIcon(spriteBatch, _sprite, new Vector2(position.X + 5f, position.Y + 5f), null, iconScale);
+            DrawItemIcon(spriteBatch, _sprite, new Vector2(position.X + 5f, position.Y + 5f), _sourceRectangle, iconScale);
             float textVertOffset = 3.5f;
             foreach (string line in wrappedText)
             {
@@ -224,13 +212,12 @@ namespace ProgressionGuide.UI
         {
             TileObjectData tileData = TileObjectData.GetTileData(tileId, 0);
             string name = Lang.GetMapObjectName(MapHelper.TileToLookup(tileId, 0));
-            Texture2D spriteSheet = TextureAssets.Tile[tileId].Value;
+            Texture2D texture = TextureAssets.Tile[tileId].Value;
 
             int width = (tileData?.Width ?? 1) * 16;
             int height = (tileData?.Height ?? 1) * 16;
             Rectangle sourceRectangle = new Rectangle(0, 0, width, height);
 
-            Texture2D texture = CropTexture(spriteSheet, sourceRectangle);
 
             return (name, texture, sourceRectangle);
         }

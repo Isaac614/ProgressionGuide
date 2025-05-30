@@ -28,7 +28,9 @@ namespace ProgressionGuide.UI
                 {
                     station = new ItemDisplay(tileId);
                 }
-                    AddItem(station);
+
+                // TileDisplay station = new TileDisplay(tileId);
+                AddItem(station);
             }
         }
 

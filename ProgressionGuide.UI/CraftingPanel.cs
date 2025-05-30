@@ -32,15 +32,15 @@ namespace ProgressionGuide.UI
         {
             base.OnInitialize();
 
-            _ingredientPanel = new(1f, 0.75f, true, false);
-            _stationPanel = new(1f, 0.25f, false, false);
+            _ingredientPanel = new(1f, 0.70f, true, false);
+            _stationPanel = new(1f, 0.20f, false, false);
 
             Width.Set(0, _width);
             Height.Set(0, _height);
-            PaddingLeft = 5f;
-            PaddingRight = 5f;
-            PaddingTop = 5f;
-            PaddingBottom = 5f;
+            PaddingLeft = 15f;
+            PaddingRight = 15f;
+            PaddingTop = 15f;
+            PaddingBottom = 15f;
 
             if (_bottomAlign)
             {
