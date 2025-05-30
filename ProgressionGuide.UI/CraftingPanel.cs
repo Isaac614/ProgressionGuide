@@ -65,13 +65,13 @@ namespace ProgressionGuide.UI
         }
 
 
-        public void PopulateContent(Item item)
+        public void PopulateContent()
         {
             Recipe recipe = null;
             for (int i = 0; i < Recipe.numRecipes; i++)
             {
                 recipe = Main.recipe[i];
-                if (recipe.createItem.type == item.type)
+                if (recipe.createItem.type == _itemToCraft.type)
                 {
                     break;
                 }

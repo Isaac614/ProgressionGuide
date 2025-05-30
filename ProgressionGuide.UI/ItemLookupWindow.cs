@@ -48,7 +48,7 @@ namespace ProgressionGuide.UI
 
         public void PopulateCraftingInfo()
         {
-            craftingPanel.PopulateContent(new Item(ItemID.TerraBlade));
+            craftingPanel.PopulateContent();
         }
 
     }
