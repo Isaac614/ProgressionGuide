@@ -18,7 +18,7 @@ namespace ProgressionGuide.UI
         internal UserInterface _userInterface;
         private GameTime _lastUpdateUIGameTime;
         // private SearchEngine _searchEngine = new SearchEngine();
-        public static bool IsUIVisible { get; set; }
+        public bool IsUIVisible { get; set; }
 
         public override void Load()
         {
@@ -32,6 +32,7 @@ namespace ProgressionGuide.UI
         public override void Unload()
         {
             _mainUIState.Deactivate();
+            _mainUIState = null;
             _userInterface.SetState(null);
             _userInterface = null;
         }
@@ -75,8 +76,6 @@ namespace ProgressionGuide.UI
         public void ToggleUI()
         {
             IsUIVisible = !IsUIVisible;
-
-            Main.NewText($"UI toggled", Color.Blue);
         }
 
         public void PopulateItemLookupWindow()
@@ -89,6 +88,7 @@ namespace ProgressionGuide.UI
             base.OnWorldUnload();
 
             _userInterface.SetState(null);
+            _mainUIState?.Deactivate();
             _mainUIState = new MainUIState();
             IsUIVisible = false;
         }
