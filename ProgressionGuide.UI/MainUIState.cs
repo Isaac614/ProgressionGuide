@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 using Terraria.UI;
 
 namespace ProgressionGuide.UI
@@ -11,7 +12,7 @@ namespace ProgressionGuide.UI
 
         public override void OnInitialize()
         {
-            mainWindow = new ItemLookupWindow();
+            mainWindow = new ItemLookupWindow(new Item(ItemID.TerraBlade));
             Append(mainWindow);
         }
 

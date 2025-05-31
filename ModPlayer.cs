@@ -22,7 +22,8 @@ public class UITogglePlayer : ModPlayer
     // }
 
     private bool activeKeyPreviousState = false;
-    private bool testKeyPreviousState = false;
+    private bool populateCraftingInfoPreviousState = false;
+    private bool getSerachTextPreviousState = false;
 
 
     public override void ProcessTriggers(TriggersSet triggersSet)
@@ -38,13 +39,24 @@ public class UITogglePlayer : ModPlayer
 
         activeKeyPreviousState = activeKeyState;
 
-        bool testKeyState = Main.keyState.IsKeyDown(Keys.OemCloseBrackets);
 
-        if (testKeyState && !testKeyPreviousState)
+        bool populateCraftingInfoState = Main.keyState.IsKeyDown(Keys.OemCloseBrackets);
+
+        if (populateCraftingInfoState && !populateCraftingInfoPreviousState)
         {
             uiSystem.PopulateItemLookupWindow();
         }
 
-        testKeyPreviousState = testKeyState;
+        populateCraftingInfoPreviousState = populateCraftingInfoState;
+
+
+        // bool getSearchTextState = Main.keyState.IsKeyDown(Keys.Enter);
+
+        // if (populateCraftingInfoState && !populateCraftingInfoPreviousState)
+        // {
+        //     uiSystem.PopulateItemLookupWindow();
+        // }
+
+        // populateCraftingInfoPreviousState = populateCraftingInfoState;
     }
 }

@@ -9,11 +9,12 @@ using System.Collections.Generic;
 using Terraria.Map;
 using Terraria.ID;
 using Terraria.ObjectData;
+using Terraria.GameContent.UI.Elements;
 
 
 namespace ProgressionGuide.UI
 {
-    public class ItemDisplay : UIElement
+    public class ItemDisplay : UIPanel
     {
         private Item? _item;
         private string _name;
@@ -90,6 +91,17 @@ namespace ProgressionGuide.UI
             base.OnInitialize();
             Width.Set(0f, 1f);
             Height.Set(50f, 0f);
+            PaddingLeft = 10f;
+            PaddingRight = 10f;
+            PaddingBottom = 10f;
+            PaddingTop = 10f;
+
+            BorderColor = new Color(19, 28, 48);
+            BackgroundColor = new Color(217, 220, 214);
+            MarginLeft = 0f;
+            MarginRight = 0f;
+            MarginBottom = 0f;
+            MarginTop = 0f;
         }
 
         
@@ -98,12 +110,10 @@ namespace ProgressionGuide.UI
         {
             base.DrawSelf(spriteBatch);
 
-            Texture2D pixel = TextureAssets.MagicPixel.Value;
-
             float iconWidth = _sprite.Width;
             float iconScale = _desiredWidth / iconWidth;
 
-            float maxWidth = GetDimensions().Width - (iconWidth * iconScale) - 10f;
+            float maxWidth = GetDimensions().Width - (iconWidth * iconScale) - (PaddingLeft + PaddingRight) - 5f;
             DynamicSpriteFont font = FontAssets.MouseText.Value;
             List<string> wrappedText;
             if (!_includeStack)
@@ -114,22 +124,23 @@ namespace ProgressionGuide.UI
             {
                 wrappedText = WrapText($"{_name} x {_stack}", font, maxWidth);
             }
-            Height.Set(wrappedText.Count * 25f + 10f, 0f);
+            Height.Set(wrappedText.Count * 28f + 10f, 0f);
 
             // Gets the area this element occupies on screen
             CalculatedStyle dimensions = GetDimensions();
-            Rectangle bounds = dimensions.ToRectangle();
             Vector2 position = dimensions.Position();
+            float fontHeight = FontAssets.MouseText.Value.MeasureString("I").Y;
 
-            spriteBatch.Draw(pixel, bounds, Color.Red);
-            DrawItemIcon(spriteBatch, _sprite, new Vector2(position.X + 5f, position.Y + 5f), _sourceRectangle, iconScale);
-            float textVertOffset = 3.5f;
+
+            float iconVertOffset = (Height.Pixels - (_sprite.Height * iconScale)) / 2f;
+            DrawItemIcon(spriteBatch, _sprite, new Vector2(position.X + PaddingLeft, position.Y + iconVertOffset), _sourceRectangle, iconScale);
+            float textVertOffset = (Height.Pixels - (wrappedText.Count * fontHeight)) / 2f;
+
             foreach (string line in wrappedText)
             {
-                DrawItemName(spriteBatch, line, new Vector2(position.X + (iconWidth * iconScale) + 10f, position.Y + textVertOffset));
-                textVertOffset += 25f;
+                DrawItemName(spriteBatch, line, new Vector2(position.X + PaddingLeft + (iconWidth * iconScale) + 10f, position.Y + textVertOffset));
+                textVertOffset += fontHeight;
             }
-            DrawBorder(spriteBatch, bounds, Color.Blue, 2);
         }
 
         private void DrawItemIcon(SpriteBatch spriteBatch, Texture2D itemIcon, Vector2 position, Rectangle? sourceRectangle, float iconScale)
@@ -142,7 +153,7 @@ namespace ProgressionGuide.UI
         {
             // var Mod = ModContent.GetInstance<ProgressionGuide>();
             DynamicSpriteFont font = FontAssets.MouseText.Value;
-            spriteBatch.DrawString(font, itemName, position, Color.White);
+            spriteBatch.DrawString(font, itemName, position, new Color(58, 124, 165));
 
         }
 
@@ -220,33 +231,6 @@ namespace ProgressionGuide.UI
 
 
             return (name, texture, sourceRectangle);
-        }
-
-        private Texture2D CropTexture(Texture2D originalTexture, Rectangle sourceRect)
-        {
-            // Get the pixel data from the original texture
-            Color[] originalData = new Color[originalTexture.Width * originalTexture.Height];
-            originalTexture.GetData(originalData);
-            
-            // Create array for cropped data
-            Color[] croppedData = new Color[sourceRect.Width * sourceRect.Height];
-            
-            // Copy the cropped portion
-            for (int y = 0; y < sourceRect.Height; y++)
-            {
-                for (int x = 0; x < sourceRect.Width; x++)
-                {
-                    int originalIndex = (sourceRect.Y + y) * originalTexture.Width + (sourceRect.X + x);
-                    int croppedIndex = y * sourceRect.Width + x;
-                    croppedData[croppedIndex] = originalData[originalIndex];
-                }
-            }
-            
-            // Create new texture with cropped data
-            Texture2D croppedTexture = new Texture2D(Main.graphics.GraphicsDevice, sourceRect.Width, sourceRect.Height);
-            croppedTexture.SetData(croppedData);
-            
-            return croppedTexture;
         }
         
     }

@@ -25,16 +25,6 @@ namespace ProgressionGuide.UI
         private MouseState previousMouseState;
         private MouseState currentMouseState;
 
-
-        public SearchBar()
-        {
-            Width.Set(0, 0.33f);
-            Height.Set(30, 0f);
-
-            Left.Set(0, .66f);
-            Top.Set(0, 0f);
-        }
-
         public string SearchText
         {
             get { return searchText; }
@@ -58,6 +48,10 @@ namespace ProgressionGuide.UI
         {
             base.OnInitialize();
             previousKeyBoardState = Keyboard.GetState();
+            Width.Set(0, 0.28f);
+            Height.Set(30, 0f);
+            Left.Set(0, 0.72f);
+            Top.Set(0, 0f);
         }
 
         public override void Update(GameTime gameTime)

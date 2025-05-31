@@ -17,6 +17,15 @@ namespace ProgressionGuide.UI
         float left) : base(width, height, top, left)
         { }
 
+        public override void OnInitialize()
+        {
+            base.OnInitialize();
+            PaddingBottom = 0f;
+            PaddingTop = 0f;
+            PaddingLeft = 0f;
+            PaddingRight = 0f;
+        }
+
         public void PopulateContent(Recipe recipe)
         {
             foreach (int tileId in recipe.requiredTile)

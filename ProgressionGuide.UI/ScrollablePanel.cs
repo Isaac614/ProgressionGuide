@@ -45,10 +45,10 @@ namespace ProgressionGuide.UI
             Width.Set(0, _width);
             Height.Set(0, _height);
 
-            PaddingLeft = 5f;
-            PaddingRight = 5f;
-            PaddingTop = 5f;
-            PaddingBottom = 5f;
+            PaddingLeft = 2f;
+            PaddingRight = 2f;
+            PaddingTop = 2f;
+            PaddingBottom = 2f;
 
             if (_bottomAlign)
                 Top.Set(0, 1.0f - Height.Percent);

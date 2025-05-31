@@ -81,6 +81,7 @@ namespace ProgressionGuide.UI
         public void PopulateItemLookupWindow()
         {
             _mainUIState.mainWindow.PopulateCraftingInfo();
+            _mainUIState.mainWindow.PopulateStatsWindow();
         }
 
         public override void OnWorldUnload()
@@ -89,7 +90,7 @@ namespace ProgressionGuide.UI
 
             _userInterface.SetState(null);
             _mainUIState?.Deactivate();
-            _mainUIState = new MainUIState();
+            _mainUIState = new MainUIState(); // Maybe this needs to be null? For crashes?
             IsUIVisible = false;
         }
     }
