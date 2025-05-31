@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ProgressionGuide")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2acff2bf19ff1ab333b908e4ac86e9ab5bcde3f5")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+95a3640560e6e1ebeae807cca58f321326a6985a")]
 [assembly: System.Reflection.AssemblyProductAttribute("ProgressionGuide")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ProgressionGuide")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
