@@ -21,23 +21,24 @@ namespace ProgressionGuide.UI
         {
             base.OnWorldUnload();
 
-            _mainUIState.mainWindow.Unload();
-
             // Set UI visibility first
             IsUIVisible = false;
 
-            // Safely dispose UI components
-            if (_userInterface != null)
-            {
-                _userInterface.SetState(null);
-                _userInterface = null;
-            }
-
+            // Safely dispose UI components with null checks
             if (_mainUIState != null)
             {
+                _mainUIState.mainWindow?.Unload(); // Safe null check
+                _userInterface?.SetState(null); // Clear state before disposal
+                
                 _mainUIState.Deactivate();
                 _mainUIState.Clear();
                 _mainUIState = null;
+            }
+
+            if (_userInterface != null)
+            {
+                _userInterface.SetState(null); // Ensure state is cleared
+                _userInterface = null;
             }
 
             // Safely dispose search engine
@@ -50,8 +51,14 @@ namespace ProgressionGuide.UI
 
         public override void OnWorldLoad()
         {
-            _userInterface = new UserInterface();
+            base.OnWorldLoad();
+            // Ensure clean state (defensive programming)
+            if (_userInterface != null || _mainUIState != null)
+            {
+                OnWorldUnload(); // Clean up any existing state
+            }
 
+            _userInterface = new UserInterface();
             _mainUIState = new MainUIState();
             _mainUIState.Activate();
             _userInterface.SetState(_mainUIState);
@@ -59,22 +66,6 @@ namespace ProgressionGuide.UI
             _searchEngine = new SearchEngine();
             _searchEngine.PopulateItems();
         }
-
-        // public override void OnWorldUnload()
-        // {
-        //     base.OnWorldUnload();
-
-        //     _mainUIState?.Clear();
-        //     _userInterface?.SetState(null);
-        //     _mainUIState?.Deactivate();
-        //     IsUIVisible = false;
-
-        //     _mainUIState = null;
-        //     _userInterface = null;
-
-        //     _searchEngine?.Clear();
-        //     _searchEngine = null;
-        // }
 
         // public override void Unload()
         // {
@@ -147,7 +138,6 @@ namespace ProgressionGuide.UI
         {
             int itemId = _searchEngine.Search(GetSearchText());
             PopulateItemLookupWindow(new Item(itemId));
-            Main.NewText(itemId);
         }
 
         public override void PostSetupContent()

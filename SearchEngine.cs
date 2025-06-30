@@ -7,10 +7,11 @@ namespace ProgressionGuide
 {
     public class SearchEngine
     {
-        private List<ItemData> _allItems = new List<ItemData>();
+        private List<ItemData> _allItems;
 
         public void PopulateItems()
         {
+            // _allItems.Clear();
             _allItems = new List<ItemData>();
             for (int i = 1; i < ItemLoader.ItemCount; i++)
             {
@@ -34,6 +35,7 @@ namespace ProgressionGuide
 
         public void Clear()
         {
+            _allItems.Clear();
             _allItems = null;
         }
 
@@ -41,10 +43,8 @@ namespace ProgressionGuide
         {
             foreach (ItemData itemData in _allItems)
             {
-                Main.NewText(itemData.Name);
                 if (itemData.Name.ToLower().Contains(searchText.ToLower()))
                 {
-                    // Main.NewText(itemData.Name);
                     return itemData.Id;
                 }
             }
