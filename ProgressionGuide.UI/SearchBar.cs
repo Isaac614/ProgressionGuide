@@ -239,21 +239,21 @@ namespace ProgressionGuide.UI
 
             DrawBorder(spriteBatch, hitbox, isActive ? Color.Blue : Color.Gray, 2);
 
-            if (FontAssets.MouseText?.Value != null) 
+            if (FontAssets.MouseText?.Value != null)
             {
                 DynamicSpriteFont font = FontAssets.MouseText.Value;
 
                 string displayText = string.IsNullOrEmpty(searchText) ? "Search..." : searchText;
                 Color textColor = string.IsNullOrEmpty(searchText) ? Color.Gray : Color.Black;
 
-                Vector2 textSize = font.MeasureString(displayText); 
-                float paddingX = 8f; 
-                float verticalOffset = (dimensions.Height - textSize.Y) / 2f; 
-                
+                Vector2 textSize = font.MeasureString(displayText);
+                float paddingX = 8f;
+                float verticalOffset = (dimensions.Height - textSize.Y) / 2f;
+
                 Vector2 textPosition = new Vector2(dimensions.X + paddingX, dimensions.Y + verticalOffset);
 
                 Utils.DrawBorderStringFourWay(spriteBatch, font, displayText, textPosition.X, textPosition.Y, textColor, Color.Black, Vector2.Zero, 1f);
-                
+
                 if (isActive && showCursor)
                 {
                     Vector2 cursorDrawPos;
@@ -263,19 +263,19 @@ namespace ProgressionGuide.UI
                         cursorDrawPos = new Vector2(textPosition.X, textPosition.Y);
                     }
                     else
-                    {  
+                    {
                         string textBeforeCursor = searchText.Substring(0, cursorPosition);
                         Vector2 textBeforeCursorSize = font.MeasureString(textBeforeCursor);
-                        
+
                         cursorDrawPos = new Vector2(textPosition.X + textBeforeCursorSize.X, textPosition.Y);
                     }
-                    
+
                     int cursorHeight = (int)(font.MeasureString("A").Y * 0.75);
 
                     Rectangle cursorRect = new Rectangle(
                         (int)cursorDrawPos.X,
-                        (int)cursorDrawPos.Y, 
-                        2, 
+                        (int)cursorDrawPos.Y,
+                        2,
                         cursorHeight
                     );
                     spriteBatch.Draw(TextureAssets.MagicPixel.Value, cursorRect, Color.Red);

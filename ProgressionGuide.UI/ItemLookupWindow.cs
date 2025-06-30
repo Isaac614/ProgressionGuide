@@ -9,11 +9,11 @@ namespace ProgressionGuide.UI
 {
     public class ItemLookupWindow : UIPanel
     {
-        private Item _item;
+        private Item? _item;
         private SearchBar _searchBar;
         private CraftingPanel _craftingPanel;
-        private UIPanel _bigItem;
-        private StatsPanel _infoPanel;
+        private BigItem _bigItem;
+        private StatsPanel _statPanel;
 
         public SearchBar SearchBar
         {
@@ -22,13 +22,13 @@ namespace ProgressionGuide.UI
 
         public ItemLookupWindow(Item item)
         {
+            Main.instance.LoadItem(item.type);
             _item = item;
         }
 
         public override void OnInitialize()
         {
             base.OnInitialize();
-            Main.instance.LoadItem(_item.type);
 
             Width.Set(0, 0.7f);
             Height.Set(0, 0.4f);
@@ -40,30 +40,50 @@ namespace ProgressionGuide.UI
             BorderColor = new Color(19, 28, 48);
 
             _searchBar = new SearchBar();
-            _infoPanel = new StatsPanel(0.28f, 1f, true, false, _item);
-            _craftingPanel = new CraftingPanel(0.28f, 0.85f, true, true, _item);
-            _bigItem = new BigItem(_item.Name, TextureAssets.Item[_item.type].Value, 0.38f, 1f);
+            _statPanel = new StatsPanel(0.28f, 1f, true, false);
+            _craftingPanel = new CraftingPanel(0.28f, 0.85f, true, true);
+            _bigItem = new BigItem(0.38f, 1f);
 
             Append(_searchBar);
-            Append(_infoPanel);
+            Append(_statPanel);
             Append(_craftingPanel);
             Append(_bigItem);
         }
-
 
         public string GetSearchText()
         {
             return _searchBar?.SearchText ?? "";
         }
 
-        public void PopulateCraftingInfo()
+        public bool GetSearchBarActive()
         {
-            _craftingPanel.PopulateContent();
+            return _searchBar.IsActive;
         }
 
-        public void PopulateStatsWindow()
+        public void Populate(Item item)
         {
-            _infoPanel.PopulateStats(new Item(ItemID.TerraBlade));
+            Clear();
+            Main.instance.LoadItem(item.type);
+            _craftingPanel.PopulateContent(item);
+            _statPanel.PopulateStats(item);
+            _bigItem.Populate(item);
+        }
+
+        public void Clear()
+        {
+            _searchBar.ClearSearch();
+            _statPanel.Clear();
+            _craftingPanel.Clear();
+            _bigItem.Clear(); 
+        }
+
+        public void Unload()
+        {
+            _item = null;
+            _searchBar.ClearSearch();
+            _statPanel.Unload();
+            _craftingPanel.Unload();
+            _bigItem.Unload();
         }
 
     }

@@ -23,7 +23,7 @@ public class UITogglePlayer : ModPlayer
 
     private bool activeKeyPreviousState = false;
     private bool populateCraftingInfoPreviousState = false;
-    private bool getSerachTextPreviousState = false;
+    private bool getSearchTextPreviousState = false;
 
 
     public override void ProcessTriggers(TriggersSet triggersSet)
@@ -44,19 +44,19 @@ public class UITogglePlayer : ModPlayer
 
         if (populateCraftingInfoState && !populateCraftingInfoPreviousState)
         {
-            uiSystem.PopulateItemLookupWindow();
+            uiSystem.PopulateItemLookupWindow(new Item(ItemID.TerraBlade));
         }
 
         populateCraftingInfoPreviousState = populateCraftingInfoState;
 
 
-        // bool getSearchTextState = Main.keyState.IsKeyDown(Keys.Enter);
+        bool getSearchTextState = Main.keyState.IsKeyDown(Keys.RightShift);
 
-        // if (populateCraftingInfoState && !populateCraftingInfoPreviousState)
-        // {
-        //     uiSystem.PopulateItemLookupWindow();
-        // }
+        if (getSearchTextState && uiSystem.GetSearchBarActive() && !getSearchTextPreviousState)
+        {
+            uiSystem.Search();
+        }
 
-        // populateCraftingInfoPreviousState = populateCraftingInfoState;
+        getSearchTextPreviousState = getSearchTextState;
     }
 }

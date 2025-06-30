@@ -6,7 +6,7 @@ using ReLogic.Graphics;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
-using Terraria.Social.WeGame;
+using Terraria.ID;
 using Terraria.UI;
 
 namespace ProgressionGuide.UI
@@ -15,16 +15,20 @@ namespace ProgressionGuide.UI
     {
         private float _width;
         private float _height;
-        private string _name;
-        private Texture2D _sprite;
+        private string? _name;
+        private Texture2D? _sprite;
 
-        public BigItem(string name, Texture2D sprite, float width, float height)
+
+        public BigItem(float width, float height)
         {
-            _name = name;
-            _sprite = sprite;
-
             _width = width;
             _height = height;
+        }
+
+        public void Populate(Item item)
+        {
+            _name = item.Name;
+            _sprite = TextureAssets.Item[item.type].Value;
         }
 
         public override void OnInitialize()
@@ -46,33 +50,37 @@ namespace ProgressionGuide.UI
         {
             base.DrawSelf(spriteBatch);
 
-            float fontScale = 2.0f;
-            float fontHeight = FontAssets.MouseText.Value.MeasureString(_name).Y * fontScale;
-
-            // Gets the area this element occupies on screen
-            CalculatedStyle dimensions = GetDimensions();
-            Vector2 position = dimensions.Position();
-
-            float maxWidth = dimensions.Width - (PaddingLeft + PaddingRight) - 5f;
-            DynamicSpriteFont font = FontAssets.MouseText.Value;
-            List<string> wrappedText;
-            wrappedText = WrapText(_name, font, maxWidth, fontScale);
-
-            // Draw/write text
-            float textVertOffset = PaddingTop;
-            for (int i = 0; i < wrappedText.Count; i++)
+            if (_name != null)
             {
-                float textHorzOffset = (dimensions.Width - FontAssets.MouseText.Value.MeasureString(wrappedText[i]).X * fontScale) / 2f;
-                DrawItemName(spriteBatch, wrappedText[i], new Vector2(position.X + textHorzOffset, position.Y + textVertOffset),
-                new Color(58, 124, 165), fontScale);
-                textVertOffset += fontHeight;
+                float fontScale = 2.0f;
+                float fontHeight = FontAssets.MouseText.Value.MeasureString("_name").Y * fontScale;
+
+                // Gets the area this element occupies on screen
+                CalculatedStyle dimensions = GetDimensions();
+                Vector2 position = dimensions.Position();
+
+                float maxWidth = dimensions.Width - (PaddingLeft + PaddingRight) - 5f;
+                DynamicSpriteFont font = FontAssets.MouseText.Value;
+                List<string> wrappedText;
+                wrappedText = WrapText(_name, font, maxWidth, fontScale);
+
+                // Draw/write text
+                float textVertOffset = PaddingTop;
+                for (int i = 0; i < wrappedText.Count; i++)
+                {
+                    float textHorzOffset = (dimensions.Width - FontAssets.MouseText.Value.MeasureString(wrappedText[i]).X * fontScale) / 2f;
+                    DrawItemName(spriteBatch, wrappedText[i], new Vector2(position.X + textHorzOffset, position.Y + textVertOffset),
+                    new Color(58, 124, 165), fontScale);
+                    textVertOffset += fontHeight;
+                }
+
+                float iconScale = (dimensions.Height - PaddingTop - (wrappedText.Count * fontHeight)) / _sprite.Height * 0.8f;
+                float iconVertOffset = PaddingTop + (wrappedText.Count * fontHeight);
+                float iconHorzOffset = (dimensions.Width - _sprite.Width * iconScale) / 2f;
+                // Draw icon
+                DrawItemIcon(spriteBatch, _sprite, new Vector2(position.X + iconHorzOffset, position.Y + iconVertOffset), null, iconScale);
             }
 
-            float iconScale = (dimensions.Height - PaddingTop - (wrappedText.Count * fontHeight)) / _sprite.Height * 0.8f;
-            float iconVertOffset = PaddingTop + (wrappedText.Count * fontHeight);
-            float iconHorzOffset = (dimensions.Width - _sprite.Width * iconScale) / 2f;
-            // Draw icon
-            DrawItemIcon(spriteBatch, _sprite, new Vector2(position.X + iconHorzOffset, position.Y + iconVertOffset), null, iconScale);
         }
 
         private void DrawItemIcon(SpriteBatch spriteBatch, Texture2D itemIcon, Vector2 position, Rectangle? sourceRectangle, float iconScale)
@@ -101,7 +109,7 @@ namespace ProgressionGuide.UI
 
         private List<string> WrapText(string text, DynamicSpriteFont font, float lineLength, float scale)
         {
-            float strLen = (font.MeasureString(text).X) * scale;
+            float strLen = font.MeasureString(text).X * scale;
             bool longer = strLen >= lineLength;
             List<string> wrappedText = new List<string>();
             if (longer)
@@ -145,6 +153,17 @@ namespace ProgressionGuide.UI
                 return wrappedText;
             }
             return wrappedText;
+        }
+
+        public void Clear()
+        {
+            _name = null;
+            _sprite = null;
+        }
+
+        public void Unload()
+        {
+            _sprite = null;
         }
     }
 }

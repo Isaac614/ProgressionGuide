@@ -3,10 +3,7 @@ using Microsoft.Xna.Framework;
 using Terraria.ModLoader;
 using Terraria.UI;
 using Terraria;
-using ProgressionGuide;
-using System.Diagnostics.Eventing.Reader;
 using Terraria.ID;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ProgressionGuide.UI
 {
@@ -17,25 +14,77 @@ namespace ProgressionGuide.UI
         internal MainUIState _mainUIState;
         internal UserInterface _userInterface;
         private GameTime _lastUpdateUIGameTime;
-        // private SearchEngine _searchEngine = new SearchEngine();
+        private SearchEngine _searchEngine;
         public bool IsUIVisible { get; set; }
 
-        public override void Load()
+        public override void OnWorldUnload()
+        {
+            base.OnWorldUnload();
+
+            _mainUIState.mainWindow.Unload();
+
+            // Set UI visibility first
+            IsUIVisible = false;
+
+            // Safely dispose UI components
+            if (_userInterface != null)
+            {
+                _userInterface.SetState(null);
+                _userInterface = null;
+            }
+
+            if (_mainUIState != null)
+            {
+                _mainUIState.Deactivate();
+                _mainUIState.Clear();
+                _mainUIState = null;
+            }
+
+            // Safely dispose search engine
+            if (_searchEngine != null)
+            {
+                _searchEngine.Clear();
+                _searchEngine = null;
+            }
+        }
+
+        public override void OnWorldLoad()
         {
             _userInterface = new UserInterface();
 
             _mainUIState = new MainUIState();
             _mainUIState.Activate();
             _userInterface.SetState(_mainUIState);
+
+            _searchEngine = new SearchEngine();
+            _searchEngine.PopulateItems();
         }
 
-        public override void Unload()
-        {
-            _mainUIState.Deactivate();
-            _mainUIState = null;
-            _userInterface.SetState(null);
-            _userInterface = null;
-        }
+        // public override void OnWorldUnload()
+        // {
+        //     base.OnWorldUnload();
+
+        //     _mainUIState?.Clear();
+        //     _userInterface?.SetState(null);
+        //     _mainUIState?.Deactivate();
+        //     IsUIVisible = false;
+
+        //     _mainUIState = null;
+        //     _userInterface = null;
+
+        //     _searchEngine?.Clear();
+        //     _searchEngine = null;
+        // }
+
+        // public override void Unload()
+        // {
+        //     _mainUIState.Deactivate();
+        //     _mainUIState = null;
+        //     _userInterface.SetState(null);
+        //     _userInterface = null;
+        //     // _searchEngine = null;
+        // }
+
 
         public override void UpdateUI(GameTime gameTime)
         {
@@ -78,20 +127,32 @@ namespace ProgressionGuide.UI
             IsUIVisible = !IsUIVisible;
         }
 
-        public void PopulateItemLookupWindow()
+        public void PopulateItemLookupWindow(Item item)
         {
-            _mainUIState.mainWindow.PopulateCraftingInfo();
-            _mainUIState.mainWindow.PopulateStatsWindow();
+            _mainUIState.mainWindow.Populate(item);
         }
 
-        public override void OnWorldUnload()
-        {
-            base.OnWorldUnload();
 
-            _userInterface.SetState(null);
-            _mainUIState?.Deactivate();
-            _mainUIState = new MainUIState(); // Maybe this needs to be null? For crashes?
-            IsUIVisible = false;
+        public string GetSearchText()
+        {
+            return _mainUIState?.GetSearchText() ?? "";
+        }
+
+        public bool GetSearchBarActive()
+        {
+            return _mainUIState.GetSearchBarActive();
+        }
+
+        public void Search()
+        {
+            int itemId = _searchEngine.Search(GetSearchText());
+            PopulateItemLookupWindow(new Item(itemId));
+            Main.NewText(itemId);
+        }
+
+        public override void PostSetupContent()
+        {
+            base.PostSetupContent();
         }
     }
 }

@@ -12,7 +12,6 @@ namespace ProgressionGuide.UI
 {
     public class StatDisplay : UIPanel
     {
-        private Item _item;
         private string _stat;
         private string _value;
 

@@ -16,7 +16,6 @@ namespace ProgressionGuide.UI
 {
     public class ItemDisplay : UIPanel
     {
-        private Item? _item;
         private string _name;
         protected Texture2D _sprite;
         private int _stack;
@@ -27,7 +26,6 @@ namespace ProgressionGuide.UI
 
         public ItemDisplay(Item item)
         {
-            _item = item;
             Main.instance.LoadItem(item.type);
             _name = item.Name;
             _sprite = TextureAssets.Item[item.type].Value;
@@ -37,7 +35,6 @@ namespace ProgressionGuide.UI
         }
         public ItemDisplay(Item item, int desiredWidth)
         {
-            _item = item;
             Main.instance.LoadItem(item.type);
             _name = item.Name;
             _sprite = TextureAssets.Item[item.type].Value;
@@ -47,7 +44,6 @@ namespace ProgressionGuide.UI
         }
         public ItemDisplay(Item item, bool includeStack)
         {
-            _item = item;
             Main.instance.LoadItem(item.type);
             _name = item.Name;
             _sprite = TextureAssets.Item[item.type].Value;
@@ -58,7 +54,6 @@ namespace ProgressionGuide.UI
         }
         public ItemDisplay(Item item, int desiredWidth, bool includeStack)
         {
-            _item = item;
             Main.instance.LoadItem(item.type);
             _name = item.Name;
             _sprite = TextureAssets.Item[item.type].Value;
@@ -85,7 +80,6 @@ namespace ProgressionGuide.UI
             OnInitialize();
         }
 
-
         public override void OnInitialize()
         {
             base.OnInitialize();
@@ -103,8 +97,6 @@ namespace ProgressionGuide.UI
             MarginBottom = 0f;
             MarginTop = 0f;
         }
-
-        
 
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
@@ -231,6 +223,11 @@ namespace ProgressionGuide.UI
 
 
             return (name, texture, sourceRectangle);
+        }
+
+        public virtual void Clear()
+        {
+            _sprite = null;
         }
         
     }

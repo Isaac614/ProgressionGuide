@@ -1,46 +1,54 @@
-// using System.ComponentModel;
-// using Terraria;
-// using Terraria.GameContent.Creative;
-// using Terraria.ModLoader;
+using System.Collections.Generic;
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
 
-// namespace ProgressionGuide
-// {
-//     public class SearchEngine
-//     {
-//         private List<ItemData> _allItems = new List<ItemData>();
-//         private bool _isInitialized = false;
+namespace ProgressionGuide
+{
+    public class SearchEngine
+    {
+        private List<ItemData> _allItems = new List<ItemData>();
 
-//         // public void Initialize()
-//         // {
-//         //     if (_isInitialized) return;
+        public void PopulateItems()
+        {
+            _allItems = new List<ItemData>();
+            for (int i = 1; i < ItemLoader.ItemCount; i++)
+            {
+                Item item = new Item();
+                try
+                {
+                    item.SetDefaults(i);
+                }
+                catch
+                {
+                    continue;
+                }
 
-//         //     PopulateItems();
-//         //     _isInitialized = true;
-//         // }
+                // skips invalid and empty items
+                if (item.type <= ItemID.None || string.IsNullOrEmpty(item.Name))
+                    continue;
 
-//         public void PopulateItems()
-//         {
-//             for (int i = 1; i < ItemLoader.ItemCount; i++)
-//             {
-//                 Item item = new Item();
-//                 item.SetDefaults();
+                _allItems.Add(new ItemData(item.type, item.Name));
+            }
+        }
 
-//                 // skips invalid and empty items
-//                 if (item.type <= 0 || string.IsNullOrEmpty(item.Name))
-//                     continue;
+        public void Clear()
+        {
+            _allItems = null;
+        }
 
-//                 _allItems.Add(new ItemData
-//                 {
-//                     ItemId = item.type,
-//                     Name = item.Name,
-//                     Tooltip = item.ToolTip.ToString(), // TODO - make sure this works
-//                     Rarity = item.rare,
-//                     Damage = item.damage,
-//                     // Category = GetItemCategory(item), TODO - fix this; this func doessn't exist
-//                     IsWeapon = item.damage > 0,
-//                     IsAccessory = item.accessory,
-//                 });
-//             }
-//         }
-//     }
-// }
+        public int Search(string searchText)
+        {
+            foreach (ItemData itemData in _allItems)
+            {
+                Main.NewText(itemData.Name);
+                if (itemData.Name.ToLower().Contains(searchText.ToLower()))
+                {
+                    // Main.NewText(itemData.Name);
+                    return itemData.Id;
+                }
+            }
+            return -1;
+        }
+    }
+}

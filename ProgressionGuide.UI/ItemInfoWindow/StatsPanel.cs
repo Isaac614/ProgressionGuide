@@ -7,17 +7,12 @@ namespace ProgressionGuide.UI
 {
     public class StatsPanel : ScrollablePanel
     {
-        private Item _item;
         public StatsPanel(float width, float height, bool bottomAlign,
-        bool rightAlign, Item item) : base(width, height, bottomAlign, rightAlign)
-        {
-            _item = item;
-        }
-        public StatsPanel( float width, float height, float top,
-        float left, Item item) : base(width, height, top, left)
-        {
-            _item = item;
-        }
+        bool rightAlign) : base(width, height, bottomAlign, rightAlign)
+        { }
+        public StatsPanel(float width, float height, float top,
+        float left) : base(width, height, top, left)
+        { }
 
         public void PopulateStats(Item item)
         {

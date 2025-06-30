@@ -1,10 +1,4 @@
-using System.Security.Cryptography.Xml;
-using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.GameContent.UI.Elements;
-using Terraria.ID;
-using System.Collections.Generic;
-using Terraria.UI;
 
 namespace ProgressionGuide.UI
 {
@@ -22,5 +16,6 @@ namespace ProgressionGuide.UI
                 AddItem(ingredient);
             }
         }
+
     }
 }

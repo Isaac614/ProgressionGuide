@@ -21,6 +21,11 @@ namespace ProgressionGuide.UI
             return mainWindow?.GetSearchText() ?? "";
         }
 
+        public bool GetSearchBarActive()
+        {
+            return mainWindow.GetSearchBarActive();
+        }
+
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
@@ -29,6 +34,11 @@ namespace ProgressionGuide.UI
             {
                 Main.LocalPlayer.mouseInterface = true;
             }
+        }
+
+        public void Clear()
+        {
+            mainWindow.Clear();
         }
 
     }

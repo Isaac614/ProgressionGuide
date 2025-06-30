@@ -16,19 +16,17 @@ namespace ProgressionGuide.UI
         private float _height;
         private bool _bottomAlign;
         private bool _rightAlign;
-        private Item _itemToCraft;
         private IngredientPanel _ingredientPanel;
         private StationPanel _stationPanel;
 
 
         public CraftingPanel(float width, float height, bool bottomAlign,
-        bool rightAlign, Item item)
+        bool rightAlign)
         {
             _width = width;
             _height = height;
             _bottomAlign = bottomAlign;
             _rightAlign = rightAlign;
-            _itemToCraft = item;
         }
 
         public override void OnInitialize()
@@ -62,7 +60,7 @@ namespace ProgressionGuide.UI
             UIText ingredientLabelText = new UIText("Ingredients", 1.0f);
             ingredientLabelText.VAlign = 0.5f;
             ingredientLabelText.HAlign = 0.5f;
-            
+
             stationLabel.Append(stationLabelText);
             ingredientLabel.Append(ingredientLabelText);
 
@@ -98,14 +96,13 @@ namespace ProgressionGuide.UI
             Append(ingredientLabel);
         }
 
-
-        public void PopulateContent()
+        public void PopulateContent(Item item)
         {
             Recipe recipe = null;
             for (int i = 0; i < Recipe.numRecipes; i++)
             {
                 recipe = Main.recipe[i];
-                if (recipe.createItem.type == _itemToCraft.type)
+                if (recipe.createItem.type == item.type)
                 {
                     break;
                 }
@@ -120,6 +117,18 @@ namespace ProgressionGuide.UI
             {
                 // TODO - account for null recipe
             }
+        }
+
+        public void Clear()
+        {
+            _ingredientPanel.Clear();
+            _stationPanel.Clear();
+        }
+
+        public void Unload()
+        {
+            _ingredientPanel.Unload();
+            _stationPanel.Unload();
         }
     }
 }

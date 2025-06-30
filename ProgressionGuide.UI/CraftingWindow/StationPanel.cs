@@ -1,10 +1,6 @@
 using Terraria;
 using System.Collections.Generic;
-using Terraria.ID;
-using Microsoft.Xna.Framework;
 using Terraria.ModLoader;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Terraria.UI;
 
 namespace ProgressionGuide.UI
 {
@@ -41,7 +37,6 @@ namespace ProgressionGuide.UI
                     station = new ItemDisplay(tileId);
                 }
 
-                // TileDisplay station = new TileDisplay(tileId);
                 AddItem(station);
             }
         }

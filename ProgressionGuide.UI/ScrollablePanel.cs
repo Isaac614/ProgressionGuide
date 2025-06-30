@@ -1,6 +1,5 @@
 
 using Microsoft.Xna.Framework;
-using rail;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
 
@@ -15,7 +14,7 @@ namespace ProgressionGuide.UI
         private bool _bottomAlign;
         private bool _rightAlign;
 
-        private UIList _contentList = new UIList();
+        private UIList? _contentList = new UIList();
         protected UIScrollbar _scrollbar;
         protected bool _needsScrollbar = false;
         public int Count => _contentList.Count;
@@ -64,7 +63,7 @@ namespace ProgressionGuide.UI
                 Left.Set(0f, (float)_left);
             else
                 Left.Set(0f, 0f);
-                
+
 
             // Creating list for the content
             _contentList = new UIList();
@@ -108,37 +107,41 @@ namespace ProgressionGuide.UI
             UpdateScrollbar();
         }
 
-        public void Clear()
+        public virtual void Clear()
         {
-            _contentList.Clear();
+            _contentList?.Clear();
             UpdateScrollbar();
         }
 
         private void UpdateScrollbar()
         {
-            Recalculate(); // checks to see if we need the scrollbar
-
-            float listHeight = _contentList.GetTotalHeight();
-            float panelHeight = GetDimensions().Height;
-
-            _needsScrollbar = listHeight > panelHeight;
-
-            if (_needsScrollbar)
+            if (_contentList != null)
             {
-                if (!HasChild(_scrollbar))
+                Recalculate(); // checks to see if we need the scrollbar
+                float listHeight = _contentList.GetTotalHeight();
+                float panelHeight = GetDimensions().Height;
+
+                _needsScrollbar = listHeight > panelHeight;
+
+                if (_needsScrollbar)
                 {
-                    _contentList.Width.Set(-25f, 1f);
-                    Append(_scrollbar);
+                    if (!HasChild(_scrollbar))
+                    {
+                        _contentList.Width.Set(-25f, 1f);
+                        Append(_scrollbar);
+                    }
                 }
-            }
-            else
-            {
-                if (HasChild(_scrollbar))
+                else
                 {
-                    RemoveChild(_scrollbar);
-                    _contentList.Width.Set(0, 1f);
+                    if (HasChild(_scrollbar))
+                    {
+                        RemoveChild(_scrollbar);
+                        _contentList.Width.Set(0, 1f);
+                    }
                 }
+
             }
+
         }
 
         public override void Update(GameTime gameTime)
@@ -147,6 +150,14 @@ namespace ProgressionGuide.UI
 
             UpdateScrollbar();
         }
+
+        public void Unload()
+        {
+            _contentList?.Clear();
+            _contentList = null;
+        }
+
+
     }
 
     
