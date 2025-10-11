@@ -1,5 +1,3 @@
-using Terraria.GameContent.UI;
-
 namespace ProgressionGuide
 {
     public class ItemData

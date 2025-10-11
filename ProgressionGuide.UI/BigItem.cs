@@ -27,8 +27,9 @@ namespace ProgressionGuide.UI
 
         public void Populate(Item item)
         {
+            Main.instance.LoadItem(item.type);
             _name = item.Name;
-            _sprite = TextureAssets.Item[1521].Value;
+            _sprite = TextureAssets.Item[item.type].Value;
         }
 
         public override void OnInitialize()

@@ -11,6 +11,7 @@ namespace ProgressionGuide.UI
     {
         private Item? _item;
         private SearchBar _searchBar;
+        private Dropdown _dropdown;
         private CraftingPanel _craftingPanel;
         private BigItem _bigItem;
         private StatsPanel _statPanel;
@@ -43,11 +44,20 @@ namespace ProgressionGuide.UI
             _statPanel = new StatsPanel(0.28f, 1f, true, false);
             _craftingPanel = new CraftingPanel(0.28f, 0.85f, true, true);
             _bigItem = new BigItem(0.38f, 1f);
+            _dropdown = new Dropdown(0.28f, 0.3f);
+
+            // Position dropdown below search bar
+            _dropdown.Left.Set(0, 0.72f);
+            _dropdown.Top.Set(35, 0f);
+
+            // Subscribe to dropdown item selection
+            _dropdown.OnItemSelected += OnDropdownItemSelected;
 
             Append(_searchBar);
             Append(_statPanel);
             Append(_craftingPanel);
             Append(_bigItem);
+            Append(_dropdown);
         }
 
         public string GetSearchText()
@@ -63,7 +73,6 @@ namespace ProgressionGuide.UI
         public void Populate(Item item)
         {
             Clear();
-            Main.instance.LoadItem(item.type);
             _craftingPanel.PopulateContent(item);
             _statPanel.PopulateStats(item);
             _bigItem.Populate(item);

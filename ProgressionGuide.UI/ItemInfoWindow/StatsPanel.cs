@@ -21,9 +21,12 @@ namespace ProgressionGuide.UI
             StatDisplay critChance = new StatDisplay("Crit Chance", item.crit.ToString());
             StatDisplay useTime = new StatDisplay("Use Time", item.useTime.ToString());
 
-            AddItem(damage);
-            AddItem(knockback);
-            AddItem(critChance);
+            if (item.damage != -1)
+            {
+                AddItem(damage);
+                AddItem(knockback);
+                AddItem(critChance);
+            }
             AddItem(useTime);
         }
     }

@@ -67,16 +67,6 @@ namespace ProgressionGuide.UI
             _searchEngine.PopulateItems();
         }
 
-        // public override void Unload()
-        // {
-        //     _mainUIState.Deactivate();
-        //     _mainUIState = null;
-        //     _userInterface.SetState(null);
-        //     _userInterface = null;
-        //     // _searchEngine = null;
-        // }
-
-
         public override void UpdateUI(GameTime gameTime)
         {
             _lastUpdateUIGameTime = gameTime;
@@ -138,11 +128,6 @@ namespace ProgressionGuide.UI
         {
             int itemId = _searchEngine.Search(GetSearchText());
             PopulateItemLookupWindow(new Item(itemId));
-        }
-
-        public override void PostSetupContent()
-        {
-            base.PostSetupContent();
         }
     }
 }
