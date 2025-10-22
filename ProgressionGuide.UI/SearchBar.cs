@@ -25,6 +25,9 @@ namespace ProgressionGuide.UI
         private MouseState previousMouseState;
         private MouseState currentMouseState;
 
+        public delegate void SearchTextChangedHandler(string newText);
+        public event SearchTextChangedHandler OnSearchTextChanged;
+
         public string SearchText
         {
             get { return searchText; }
@@ -112,6 +115,7 @@ namespace ProgressionGuide.UI
                             {
                                 searchText = searchText.Remove(cursorPosition - 1, 1);
                                 cursorPosition--;
+                                OnSearchTextChanged?.Invoke(searchText);
                             }
                             break;
 
@@ -119,6 +123,7 @@ namespace ProgressionGuide.UI
                             if (cursorPosition < searchText.Length)
                             {
                                 searchText = searchText.Remove(cursorPosition, 1);
+                                OnSearchTextChanged?.Invoke(searchText);
                             }
                             break;
 
@@ -152,6 +157,7 @@ namespace ProgressionGuide.UI
                             {
                                 searchText = searchText.Insert(cursorPosition, inputChar.ToString());
                                 cursorPosition++;
+                                OnSearchTextChanged?.Invoke(searchText);
                             }
                             break;
                     }

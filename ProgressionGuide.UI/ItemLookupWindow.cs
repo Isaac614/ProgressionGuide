@@ -3,7 +3,9 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
+using Terraria.ModLoader;
 using Terraria.UI;
+using System.Collections.Generic;
 
 namespace ProgressionGuide.UI
 {
@@ -52,6 +54,9 @@ namespace ProgressionGuide.UI
 
             // Subscribe to dropdown item selection
             _dropdown.OnItemSelected += OnDropdownItemSelected;
+            
+            // Subscribe to search text changes for real-time dropdown updates
+            _searchBar.OnSearchTextChanged += OnSearchTextChanged;
 
             Append(_searchBar);
             Append(_statPanel);
@@ -93,6 +98,31 @@ namespace ProgressionGuide.UI
             _statPanel.Unload();
             _craftingPanel.Unload();
             _bigItem.Unload();
+            _dropdown.Hide();
+        }
+
+        private void OnDropdownItemSelected(ItemData itemData)
+        {
+            // Create item from the selected item data and populate the window
+            Item selectedItem = new Item(itemData.Id);
+            Populate(selectedItem);
+        }
+
+        private void OnSearchTextChanged(string newText)
+        {
+            // Notify the UI system to update the dropdown
+            ProgressionGuideUISystem uiSystem = ModContent.GetInstance<ProgressionGuideUISystem>();
+            uiSystem.UpdateSearchDropdown();
+        }
+
+        public void UpdateDropdown(List<ItemData> searchResults)
+        {
+            _dropdown.PopulateItems(searchResults);
+        }
+
+        public void HideDropdown()
+        {
+            _dropdown.Hide();
         }
 
     }

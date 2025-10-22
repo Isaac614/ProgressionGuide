@@ -129,5 +129,18 @@ namespace ProgressionGuide.UI
             int itemId = _searchEngine.Search(GetSearchText());
             PopulateItemLookupWindow(new Item(itemId));
         }
+
+        public void UpdateSearchDropdown()
+        {
+            string searchText = GetSearchText();
+            if (string.IsNullOrEmpty(searchText))
+            {
+                _mainUIState.mainWindow.HideDropdown();
+                return;
+            }
+
+            List<ItemData> searchResults = _searchEngine.SearchMultiple(searchText, 10);
+            _mainUIState.mainWindow.UpdateDropdown(searchResults);
+        }
     }
 }

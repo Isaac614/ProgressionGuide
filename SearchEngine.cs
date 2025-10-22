@@ -77,6 +77,9 @@ namespace ProgressionGuide
                 }
             }
             
+            // Debug output
+            Main.NewText($"Search for '{searchText}' returned {results.Count} results");
+            
             return results;
         }
     }
